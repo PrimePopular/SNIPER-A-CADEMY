@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3-Day Bootcamp — Sniper Academy</title>
+<meta name="description" content="A free 3-day bootcamp: a short, structured intro to the Sniper Academy framework before you decide to go deeper.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="container nav">
+    <a href="index.html" class="logo">
+      <svg class="reticle" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="9" stroke="#4d84ff" stroke-width="1.4"/>
+        <circle cx="12" cy="12" r="2.4" fill="#4d84ff"/>
+        <path d="M12 1V5M12 19V23M1 12H5M19 12H23" stroke="#4d84ff" stroke-width="1.4"/>
+      </svg>
+      SNIPER <span class="accent-letter">A</span>CADEMY
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="academy.html">Academy</a>
+      <a href="bootcamp.html" aria-current="page">Bootcamp</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-cta">
+      <a href="academy.html" class="btn btn-ghost">Explore Academy</a>
+      <button class="btn btn-primary" data-open-join>Join Now</button>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 6H21M3 12H21M3 18H21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </nav>
+  <div class="container mobile-menu">
+    <a href="index.html">Home</a>
+    <a href="academy.html">Academy</a>
+    <a href="bootcamp.html">Bootcamp</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="#" data-open-join>Join Now</a>
+  </div>
+</header>
+
+<main>
+
+  <!--
+    Background video: drop your file at assets/video/bootcamp-intro.mp4
+    (see assets/video/README.md for specs). If no file is present, this
+    section falls back to a plain gradient background automatically.
+  -->
+  <section class="video-hero">
+    <div class="video-hero-bg" data-video-wrapper>
+      <video data-bg-video autoplay muted loop playsinline poster="">
+        <source src="assets/video/bootcamp-intro.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="container video-hero-content">
+      <div class="reveal">
+        <span class="eyebrow">Free · 3 days · no card required</span>
+        <h1 style="font-size:clamp(34px,5vw,52px); margin-top:16px;">A short, honest preview of the framework — before you commit to it.</h1>
+        <p class="lede" style="margin-top:18px;">Three short lessons delivered daily. By day three you'll know exactly what the full Academy curriculum builds on, and whether it's right for you.</p>
+      </div>
+
+      <div class="signup-card card glass reveal">
+        <span class="eyebrow">Reserve your spot</span>
+        <h3 style="margin-top:12px;">Start the free bootcamp</h3>
+        <form id="bootcamp-form" style="margin-top:20px;">
+          <div class="field">
+            <label for="bc-name">Full name</label>
+            <input type="text" id="bc-name" name="name" placeholder="Your name" required>
+          </div>
+          <div class="field">
+            <label for="bc-email">Email</label>
+            <input type="email" id="bc-email" name="email" placeholder="you@email.com" required>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;">Access 3-Day Free Bootcamp</button>
+        </form>
+
+        <div class="divider-or">or</div>
+
+        <button class="btn btn-ghost" style="width:100%;" data-pay="bootcamp">Skip ahead — paid fast-track intake</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- DAY BY DAY -->
+  <section>
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">What's inside</span>
+        <h2>Three days. One idea a day, in order.</h2>
+      </div>
+      <div class="day-track reveal">
+        <div class="day-item">
+          <div class="day-badge">D1</div>
+          <div><h4>Why most retail traders lose</h4><p>The liquidity-trap pattern behind most losing trades, and how to start seeing it.</p></div>
+        </div>
+        <div class="day-item">
+          <div class="day-badge">D2</div>
+          <div><h4>Reading order flow, not candles</h4><p>A first look at the institutional framework the full curriculum is built on.</p></div>
+        </div>
+        <div class="day-item">
+          <div class="day-badge">D3</div>
+          <div><h4>Your risk plan, on one page</h4><p>The minimum risk-management rules to trade with before you touch real size.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section style="padding-top:0;">
+    <div class="container">
+      <div class="cta-banner reveal">
+        <h2>Already know you want the full curriculum?</h2>
+        <div style="display:flex; gap:16px; flex-wrap:wrap;">
+          <a href="academy.html" class="btn btn-ghost">See the Academy</a>
+          <button class="btn btn-primary" data-pay="academy">Enroll in the Academy</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <svg class="reticle" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="9" stroke="#4d84ff" stroke-width="1.4"/>
+            <circle cx="12" cy="12" r="2.4" fill="#4d84ff"/>
+            <path d="M12 1V5M12 19V23M1 12H5M19 12H23" stroke="#4d84ff" stroke-width="1.4"/>
+          </svg>
+          SNIPER <span class="accent-letter">A</span>CADEMY
+        </a>
+        <p>A systematic approach to trading — institutional frameworks, execution discipline, and risk management.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Site</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="academy.html">Academy</a></li>
+          <li><a href="bootcamp.html">Bootcamp</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Get involved</h4>
+        <ul>
+          <li><a href="#" data-open-join>Join Now</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="bootcamp.html">Free Bootcamp</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Terms</a></li>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Risk Disclosure</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© <span id="year"></span> Sniper Academy. All rights reserved.</p>
+      <p>Trading involves risk. Educational content only.</p>
+    </div>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="join-modal">
+  <div class="modal">
+    <button class="modal-close" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6L18 18M6 18L18 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+    <svg class="reticle-mini" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="2.4" fill="currentColor"/><path d="M12 1V5M12 19V23M1 12H5M19 12H23" stroke="currentColor" stroke-width="1.4"/></svg>
+    <h3>Join Sniper Academy</h3>
+    <p>Head over to our Telegram group to get access, ask questions, and connect with the community.</p>
+    <a href="#" target="_blank" rel="noopener" data-join-link class="btn btn-primary">Continue to Telegram</a>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script src="js/payment.js"></script>
+<script>
+  // Placeholder submit handler for the free bootcamp signup form.
+  // TODO: wire this to your real backend / email service (e.g. Web3Forms, Supabase).
+  document.getElementById("bootcamp-form")?.addEventListener("submit", function (e) {
+    e.preventDefault();
+    console.log("[bootcamp-form] submitted — not yet connected to a backend.");
+    alert("You're on the list! (Form isn't connected to a backend yet — wire it up when ready.)");
+    this.reset();
+  });
+</script>
+</body>
+</html>
