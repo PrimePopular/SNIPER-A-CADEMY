@@ -29,6 +29,12 @@
   const msgEl = document.getElementById("confirm-message");
 
   try {
+    // Supabase puts errors (expired link, unlisted redirect URL, etc.)
+    // straight in the URL hash — surface that instead of a generic message.
+    const hashParams = new URLSearchParams(window.location.hash.replace("#", "?"));
+    const urlError = hashParams.get("error_description") || hashParams.get("error");
+    if (urlError) throw new Error(decodeURIComponent(urlError.replace(/\+/g, " ")));
+
     const { data: { session } } = await sb.auth.getSession();
 
     if (!session || !session.user?.email) {
@@ -58,8 +64,8 @@
     setTimeout(() => { window.location.href = link; }, 1400);
   } catch (err) {
     console.error("[confirm]", err);
-    titleEl.textContent = "Something went wrong";
-    msgEl.textContent = "Please head back to the site and try again.";
+    titleEl.textContent = "Couldn't confirm that";
+    msgEl.textContent = err.message || "Please head back to the site and try again.";
   }
 })();
 </script>
