@@ -5,6 +5,16 @@
 // admin has set in site_settings.
 // ==========================================================================
 
+// Builds the confirm.html URL correctly even when the site lives in a
+// subfolder (e.g. GitHub Pages project sites like
+// username.github.io/repo-name/) — window.location.origin alone drops
+// that subfolder and breaks the confirmation link.
+function siteBaseUrl() {
+  const path = window.location.pathname;
+  const dir = path.substring(0, path.lastIndexOf("/") + 1);
+  return window.location.origin + dir;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("join-form");
   const status = document.getElementById("join-status");
@@ -30,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // confirm.html, which finishes verification and redirects.
       const { error } = await sb.auth.signInWithOtp({
         email,
-        options: { emailRedirectTo: `${window.location.origin}/confirm.html` },
+        options: { emailRedirectTo: `${siteBaseUrl()}confirm.html` },
       });
 
       if (error) throw error;
