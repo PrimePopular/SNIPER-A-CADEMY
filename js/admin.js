@@ -23,6 +23,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("team-form").addEventListener("submit", handleAddTeamMember);
   document.getElementById("settings-form").addEventListener("submit", handleSaveSettings);
   document.getElementById("export-csv").addEventListener("click", exportSubscribersCSV);
+
+  document.querySelectorAll("[data-upload-media]").forEach((btn) => {
+    btn.addEventListener("click", () => handleSiteMediaUpload(btn));
+  });
 });
 
 function showLogin() { loginGate.style.display = "block"; dashboard.style.display = "none"; }
@@ -225,6 +229,31 @@ function exportSubscribersCSV() {
   a.href = URL.createObjectURL(blob);
   a.download = `sniper-academy-subscribers-${new Date().toISOString().slice(0, 10)}.csv`;
   a.click();
+}
+
+// ---- SITE MEDIA (fixed slots: logo, mentorship video, bootcamp video, founder photo) ----
+async function handleSiteMediaUpload(btn) {
+  const column = btn.dataset.uploadMedia;
+  const inputEl = document.getElementById(btn.dataset.input);
+  const file = inputEl.files[0];
+  if (!file) { toast("Choose a file first"); return; }
+
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = "Uploading...";
+  try {
+    const { url } = await uploadMedia(file, "site");
+    const { error } = await sb.from("site_settings").update({ [column]: url }).eq("id", 1);
+    if (error) throw error;
+    toast("Updated — live on the site now");
+    inputEl.value = "";
+  } catch (err) {
+    console.error(err);
+    toast(`Couldn't upload — ${err.message || "try again"}`);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
 }
 
 // ---- SETTINGS ----
