@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About  Sniper Academy</title>
+<title>About — Sniper Academy</title>
 <meta name="description" content="Why Sniper Academy exists and the philosophy behind the curriculum.">
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -38,6 +38,7 @@
     <a href="index.html">Home</a>
     <a href="academy.html">Academy</a>
     <a href="bootcamp.html">Bootcamp</a>
+    <a href="events.html">Events</a>
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
     <a href="#" data-open-join>Join Now</a>
@@ -50,7 +51,7 @@
     <div class="container reveal">
       <span class="eyebrow">About</span>
       <h1>A sniper takes one shot. Not a hundred guesses.</h1>
-      <p class="lede">Sniper Academy exists because most trading education teaches indicators, not decisions. This is the story behind the curriculum  replace with your own founder story when ready.</p>
+      <p class="lede">Sniper Academy exists because most trading education teaches indicators, not decisions. This is the story behind the curriculum — replace with your own founder story when ready.</p>
     </div>
   </section>
 
@@ -62,9 +63,23 @@
       </div>
       <div>
         <span class="eyebrow">The founder</span>
-        <h2 style="margin-top:14px; font-size:clamp(24px,3.2vw,32px);">[Founder name]  swap in the real story here.</h2>
-        <p class="text-muted" style="margin-top:16px;">Placeholder copy: a short account of how this trading approach was developed, the losses that shaped the risk-management module, and why the academy is built around discipline instead of prediction. R.</p>
-        <p class="text-muted" style="margin-top:14px;">A second paragraph on what makes the teaching style different direct mentorship, live tape review, and a curriculum that doesn't skip the psychology module most courses ignore.</p>
+        <h2 style="margin-top:14px; font-size:clamp(24px,3.2vw,32px);">[Founder name] — swap in the real story here.</h2>
+        <p class="text-muted" style="margin-top:16px;">Placeholder copy: a short account of how this trading approach was developed, the losses that shaped the risk-management module, and why the academy is built around discipline instead of prediction. Replace this paragraph with the real founder story.</p>
+        <p class="text-muted" style="margin-top:14px;">A second paragraph on what makes the teaching style different — direct mentorship, live tape review, and a curriculum that doesn't skip the psychology module most courses ignore.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="container"><div class="divider"></div></div>
+
+  <section>
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">The team</span>
+        <h2>Who's actually behind this.</h2>
+      </div>
+      <div class="grid-3 reveal" id="team-grid">
+        <p class="text-muted">Loading team...</p>
       </div>
     </div>
   </section>
@@ -162,12 +177,39 @@
     </button>
     <svg class="reticle-mini" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="2.4" fill="currentColor"/><path d="M12 1V5M12 19V23M1 12H5M19 12H23" stroke="currentColor" stroke-width="1.4"/></svg>
     <h3>Join Sniper Academy</h3>
-    <p>Head over to our Telegram group to get access, ask questions, and connect with the community.</p>
-    <a href="#" target="_blank" rel="noopener" data-join-link class="btn btn-primary">Continue to Telegram</a>
+    <p>Enter your email — we'll send a quick confirmation link, then take you straight to the community.</p>
+    <form id="join-form" style="margin-top:18px;">
+      <div class="field" style="margin-bottom:14px;">
+        <label for="join-email">Email</label>
+        <input type="email" id="join-email" name="email" placeholder="you@email.com" required>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;">Send confirmation link</button>
+    </form>
+    <p id="join-status" style="margin-top:14px; font-size:13.5px; display:none;"></p>
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/community-signup.js"></script>
 <script src="js/main.js"></script>
 <script src="js/payment.js"></script>
+<script>
+  sb.from("team_members").select("*").order("sort_order", { ascending: true }).then(({ data, error }) => {
+    const grid = document.getElementById("team-grid");
+    if (error || !data || !data.length) {
+      grid.innerHTML = `<p class="text-muted">Team roster coming soon.</p>`;
+      return;
+    }
+    grid.innerHTML = data.map((tm) => `
+      <div class="team-card card">
+        ${tm.photo_url ? `<img class="photo" src="${tm.photo_url}" alt="${tm.name}">` : `<div class="photo"></div>`}
+        <h4>${tm.name}</h4>
+        ${tm.role ? `<div class="role">${tm.role}</div>` : ""}
+        ${tm.bio ? `<p class="bio">${tm.bio}</p>` : ""}
+      </div>`).join("");
+  });
+</script>
 </body>
 </html>
