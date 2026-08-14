@@ -59,6 +59,7 @@
     <button class="admin-tab active" data-tab="events">Events</button>
     <button class="admin-tab" data-tab="team">Team</button>
     <button class="admin-tab" data-tab="subscribers">Subscribers</button>
+    <button class="admin-tab" data-tab="media">Site Media</button>
     <button class="admin-tab" data-tab="settings">Settings</button>
   </div>
 
@@ -108,6 +109,38 @@
         <button class="btn btn-ghost" id="export-csv" style="padding:9px 16px; font-size:13px;">Download CSV</button>
       </div>
       <div id="subscribers-list"><p class="text-muted" style="margin-top:12px;">Loading...</p></div>
+    </div>
+  </div>
+
+  <!-- SITE MEDIA -->
+  <div class="admin-panel" id="panel-media">
+    <div class="card" style="padding:24px; max-width:560px;">
+      <h4 style="font-size:15px;">Fixed site media</h4>
+      <p class="text-muted" style="font-size:13.5px; margin-top:6px;">These are the specific spots on the live site — the logo, the mentorship preview video, the bootcamp page background video, and the founder photo. Upload a replacement for any of them any time; it updates everywhere that slot appears, immediately.</p>
+
+      <div style="margin-top:24px; padding-top:20px; border-top:1px solid var(--border);">
+        <label style="font-family:var(--font-mono); font-size:13px; color:var(--text-muted);">Logo (used in every header & footer)</label>
+        <div style="margin-top:10px;"><input type="file" id="media-logo" accept="image/*"></div>
+        <button class="btn btn-ghost" data-upload-media="logo_url" data-input="media-logo" style="margin-top:10px; padding:8px 16px; font-size:13px;">Upload logo</button>
+      </div>
+
+      <div style="margin-top:20px; padding-top:20px; border-top:1px solid var(--border);">
+        <label style="font-family:var(--font-mono); font-size:13px; color:var(--text-muted);">Mentorship preview video (Home + Academy pages)</label>
+        <div style="margin-top:10px;"><input type="file" id="media-mentorship" accept="video/*"></div>
+        <button class="btn btn-ghost" data-upload-media="mentorship_video_url" data-input="media-mentorship" style="margin-top:10px; padding:8px 16px; font-size:13px;">Upload video</button>
+      </div>
+
+      <div style="margin-top:20px; padding-top:20px; border-top:1px solid var(--border);">
+        <label style="font-family:var(--font-mono); font-size:13px; color:var(--text-muted);">Bootcamp page background video</label>
+        <div style="margin-top:10px;"><input type="file" id="media-bootcamp" accept="video/*"></div>
+        <button class="btn btn-ghost" data-upload-media="bootcamp_video_url" data-input="media-bootcamp" style="margin-top:10px; padding:8px 16px; font-size:13px;">Upload video</button>
+      </div>
+
+      <div style="margin-top:20px; padding-top:20px; border-top:1px solid var(--border);">
+        <label style="font-family:var(--font-mono); font-size:13px; color:var(--text-muted);">Founder photo (About page)</label>
+        <div style="margin-top:10px;"><input type="file" id="media-founder" accept="image/*"></div>
+        <button class="btn btn-ghost" data-upload-media="founder_photo_url" data-input="media-founder" style="margin-top:10px; padding:8px 16px; font-size:13px;">Upload photo</button>
+      </div>
     </div>
   </div>
 
