@@ -8,6 +8,15 @@ async function fetchEvents() {
   return data;
 }
 
+function eventStatus(ev, now) {
+  const starts = new Date(ev.starts_at);
+  const ends = ev.ends_at ? new Date(ev.ends_at) : null;
+  if (now < starts) return "upcoming";
+  if (ends && now <= ends) return "live";
+  if (!ends && now.getTime() - starts.getTime() < 3600000) return "live"; // no end date: treat as live for 1hr
+  return "ended";
+}
+
 function renderCountdownCards(events, container, { limit } = {}) {
   const now = new Date();
   let list = events.slice();
@@ -20,25 +29,36 @@ function renderCountdownCards(events, container, { limit } = {}) {
 
   container.innerHTML = list.map((ev) => {
     const starts = new Date(ev.starts_at);
-    const ended = starts < now;
+    const ends = ev.ends_at ? new Date(ev.ends_at) : null;
+    const status = eventStatus(ev, now);
     const media = ev.media_url
       ? (ev.media_type === "video"
           ? `<video class="media" src="${ev.media_url}" muted autoplay loop playsinline></video>`
           : `<img class="media" src="${ev.media_url}" alt="${escapeHtmlEv(ev.title)}">`)
       : `<div class="media"></div>`;
 
-    return `
-      <div class="event-card card">
+    let statusBlock = "";
+    if (status === "upcoming") statusBlock = `<div class="countdown" data-countdown="${ev.starts_at}"></div>`;
+    else if (status === "live") statusBlock = `<span class="event-ended-badge" style="color:var(--accent-bright); border-color:var(--accent-bright);">● Live now</span>`;
+    else statusBlock = `<span class="event-ended-badge">Event ended</span>`;
+
+    const dateLabel = ends
+      ? `${starts.toLocaleDateString(undefined, { month: "short", day: "numeric" })} – ${ends.toLocaleDateString(undefined, { month: "short", day: "numeric" })}`
+      : starts.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+
+    const inner = `
         ${media}
         <div class="body">
           <h3>${escapeHtmlEv(ev.title)}</h3>
           ${ev.description ? `<p>${escapeHtmlEv(ev.description)}</p>` : ""}
-          ${ended
-            ? `<span class="event-ended-badge">Event ended</span>`
-            : `<div class="countdown" data-countdown="${ev.starts_at}"></div>`}
-          <div class="event-date">${starts.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}</div>
-        </div>
-      </div>`;
+          ${statusBlock}
+          <div class="event-date">${dateLabel}</div>
+          ${ev.link_url ? `<div class="btn-link" style="margin-top:12px;">Open link <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>` : ""}
+        </div>`;
+
+    return ev.link_url
+      ? `<a class="event-card card" href="${ev.link_url}" target="_blank" rel="noopener" style="display:flex; flex-direction:column; cursor:pointer;">${inner}</a>`
+      : `<div class="event-card card">${inner}</div>`;
   }).join("");
 
   tickCountdowns(container);
@@ -75,10 +95,17 @@ function renderCalendar(events, container, monthDate = new Date()) {
 
   const eventsByDay = {};
   events.forEach((ev) => {
-    const d = new Date(ev.starts_at);
-    if (d.getFullYear() === year && d.getMonth() === month) {
-      const key = d.getDate();
-      (eventsByDay[key] ||= []).push(ev);
+    const start = new Date(ev.starts_at);
+    const end = ev.ends_at ? new Date(ev.ends_at) : start;
+    // Walk every calendar day the event spans, so Mon–Fri events show all 5 days.
+    const cursor = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+    const last = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+    while (cursor <= last) {
+      if (cursor.getFullYear() === year && cursor.getMonth() === month) {
+        const key = cursor.getDate();
+        (eventsByDay[key] ||= []).push(ev);
+      }
+      cursor.setDate(cursor.getDate() + 1);
     }
   });
 

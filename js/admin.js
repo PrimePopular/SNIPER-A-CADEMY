@@ -82,6 +82,9 @@ async function handleAddEvent(e) {
   const title = document.getElementById("ev-title").value.trim();
   const description = document.getElementById("ev-desc").value.trim();
   const starts_at = document.getElementById("ev-date").value;
+  const endsRaw = document.getElementById("ev-end").value;
+  const ends_at = endsRaw ? endsRaw : null;
+  const link_url = document.getElementById("ev-link").value.trim() || null;
   const mediaFile = document.getElementById("ev-media").files[0];
   const submitBtn = e.target.querySelector("button[type=submit]");
 
@@ -90,7 +93,7 @@ async function handleAddEvent(e) {
   try {
     const { url, type } = await uploadMedia(mediaFile, "events");
     const { error } = await sb.from("events").insert({
-      title, description, starts_at,
+      title, description, starts_at, ends_at, link_url,
       media_url: url, media_type: type || "image",
     });
     if (error) throw error;
@@ -99,7 +102,7 @@ async function handleAddEvent(e) {
     loadEvents();
   } catch (err) {
     console.error(err);
-    toast("Couldn't save that event — try again.");
+    toast(`Couldn't save that event — ${err.message || "try again"}`);
   } finally {
     submitBtn.disabled = false;
     submitBtn.textContent = "Add event";
@@ -120,7 +123,10 @@ async function loadEvents() {
         : `<div class="thumb"></div>`}
       <div class="grow">
         <strong>${escapeHtml(ev.title)}</strong>
-        <div class="meta">${new Date(ev.starts_at).toLocaleString()}</div>
+        <div class="meta">
+          ${new Date(ev.starts_at).toLocaleString()}${ev.ends_at ? ` → ${new Date(ev.ends_at).toLocaleString()}` : ""}
+          ${ev.link_url ? " · has link" : ""}
+        </div>
       </div>
       <div class="row-actions">
         <button class="icon-btn" data-delete-event="${ev.id}" aria-label="Delete">✕</button>
