@@ -69,8 +69,10 @@
       <form id="event-form" style="margin-top:16px;">
         <div class="field"><label>Title</label><input type="text" id="ev-title" required></div>
         <div class="field"><label>Description</label><textarea id="ev-desc"></textarea></div>
-        <div class="field"><label>Date & time</label><input type="datetime-local" id="ev-date" required></div>
-        <div class="field"><label>Image or video (optional)</label><input type="file" id="ev-media" accept="image/*,video/*"></div>
+        <div class="field"><label>Starts</label><input type="datetime-local" id="ev-date" required></div>
+        <div class="field"><label>Ends (optional — leave blank for a one-moment event, fill in for multi-day/ongoing, e.g. Mon–Fri)</label><input type="datetime-local" id="ev-end"></div>
+        <div class="field"><label>Link (optional — where clicking the event takes people, e.g. Zoom/Telegram/WhatsApp)</label><input type="url" id="ev-link" placeholder="https://..."></div>
+        <div class="field"><label>Image or video — upload directly from your device</label><input type="file" id="ev-media" accept="image/*,video/*"></div>
         <button class="btn btn-primary" type="submit">Add event</button>
       </form>
     </div>
@@ -88,7 +90,7 @@
         <div class="field"><label>Name / alias</label><input type="text" id="tm-name" required></div>
         <div class="field"><label>Role</label><input type="text" id="tm-role" placeholder="e.g. Founder & Lead Mentor"></div>
         <div class="field"><label>Short bio</label><textarea id="tm-bio"></textarea></div>
-        <div class="field"><label>Photo (optional)</label><input type="file" id="tm-photo" accept="image/*"></div>
+        <div class="field"><label>Photo — upload directly from your device</label><input type="file" id="tm-photo" accept="image/*"></div>
         <button class="btn btn-primary" type="submit">Add member</button>
       </form>
     </div>
