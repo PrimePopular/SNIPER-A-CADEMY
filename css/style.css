@@ -198,6 +198,8 @@ h1, h2, h3, h4 {
   flex-shrink: 0;
 }
 
+.logo-mark { height: 34px; width: auto; display: block; }
+
 .logo .accent-letter { color: var(--accent-bright); }
 
 .nav-links {
