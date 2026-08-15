@@ -107,11 +107,12 @@
   <div class="admin-panel" id="panel-testimonials">
     <div class="card" style="padding:24px; margin-bottom:24px;">
       <h4 style="font-size:15px;">Add a testimonial</h4>
+      <p class="text-muted" style="font-size:13px; margin-top:4px;">Lead with the proof — a screenshot of the result, trade, or chat message. The comment shows underneath it.</p>
       <form id="testimonial-form" style="margin-top:16px;">
-        <div class="field"><label>Quote</label><textarea id="ts-quote" required></textarea></div>
+        <div class="field"><label>Proof screenshot (recommended — shown large, at the top of the card)</label><input type="file" id="ts-photo" accept="image/*"></div>
+        <div class="field"><label>Comment / quote</label><textarea id="ts-quote" required></textarea></div>
         <div class="field"><label>Name</label><input type="text" id="ts-name" required></div>
         <div class="field"><label>Handle (optional)</label><input type="text" id="ts-handle" placeholder="@handle"></div>
-        <div class="field"><label>Photo (optional)</label><input type="file" id="ts-photo" accept="image/*"></div>
         <button class="btn btn-primary" type="submit">Add testimonial</button>
       </form>
     </div>

@@ -342,10 +342,13 @@
     }
     const cardHtml = (ts) => `
       <div class="testimonial-card card">
-        <p class="quote">"${ts.quote}"</p>
-        <div class="who">
-          ${ts.photo_url ? `<img class="avatar" src="${ts.photo_url}" alt="" style="object-fit:cover;">` : `<div class="avatar">${ts.name.slice(0,2).toUpperCase()}</div>`}
-          <div><div class="name">${ts.name}</div>${ts.handle ? `<div class="handle">${ts.handle}</div>` : ""}</div>
+        ${ts.photo_url ? `<img class="proof-shot" src="${ts.photo_url}" alt="Result shared by ${ts.name}">` : ""}
+        <div class="body">
+          <p class="quote">"${ts.quote}"</p>
+          <div class="who">
+            <div class="avatar">${ts.name.slice(0,2).toUpperCase()}</div>
+            <div><div class="name">${ts.name}</div>${ts.handle ? `<div class="handle">${ts.handle}</div>` : ""}</div>
+          </div>
         </div>
       </div>`;
     // Duplicate the set once so the marquee scroll loops seamlessly.
