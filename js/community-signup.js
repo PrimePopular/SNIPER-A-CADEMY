@@ -54,7 +54,12 @@ document.addEventListener("DOMContentLoaded", () => {
       form.reset();
     } catch (err) {
       console.error("[join-form]", err);
-      showStatus("Something went wrong sending that — try again in a moment.", "error");
+      const raw = (err.message || "").toLowerCase();
+      let msg = err.message || "Something went wrong — try again in a moment.";
+      if (raw.includes("rate limit") || raw.includes("too many")) {
+        msg = "Too many attempts right now — Supabase's free plan limits how many confirmation emails send per hour. Wait a bit and try again.";
+      }
+      showStatus(msg, "error");
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = "Send confirmation link";
