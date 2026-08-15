@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>3-Day Bootcamp — Sniper Academy</title>
+<title>3-Day Bootcamp | Sniper Academy</title>
 <meta name="description" content="A free 3-day bootcamp: a short, structured intro to the Sniper Academy framework before you decide to go deeper.">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=6">
 </head>
 <body>
 
@@ -72,9 +72,9 @@
       <div class="signup-card card glass reveal">
         <span class="eyebrow">Reserve your spot</span>
         <h3 style="margin-top:12px;">Start the free bootcamp</h3>
-        <p class="text-muted" style="margin-top:10px; font-size:14px;">Click below to sign up — takes you to the registration form.</p>
+        <p class="text-muted" style="margin-top:10px; font-size:14px;">Click below to sign up. It takes you to the registration form.</p>
         <a href="#" id="bootcamp-form-link" class="btn btn-primary" style="width:100%; margin-top:18px;">Access 3-Day Free Bootcamp</a>
-        <p id="bootcamp-form-missing" class="text-muted" style="margin-top:12px; font-size:12.5px; display:none;">Signup form link isn't set yet — add it in admin under Settings.</p>
+        <p id="bootcamp-form-missing" class="text-muted" style="margin-top:12px; font-size:12.5px; display:none;">Signup form link isn't set yet. Add it in admin under Settings.</p>
       </div>
     </div>
   </section>
@@ -133,7 +133,7 @@
           </span>
           <img data-logo-custom class="logo-mark" alt="Sniper Academy" style="display:none;">
         </a>
-        <p>A systematic approach to trading — institutional frameworks, execution discipline, and risk management.</p>
+        <p>A systematic approach to trading: institutional frameworks, execution discipline, and risk management.</p>
       </div>
       <div class="footer-col">
         <h4>Site</h4>
@@ -188,12 +188,12 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/config.js"></script>
-<script src="js/supabase-client.js"></script>
-<script src="js/site-media.js"></script>
-<script src="js/community-signup.js"></script>
-<script src="js/main.js"></script>
-<script src="js/payment.js"></script>
+<script src="js/config.js?v=6"></script>
+<script src="js/supabase-client.js?v=6"></script>
+<script src="js/site-media.js?v=6"></script>
+<script src="js/community-signup.js?v=6"></script>
+<script src="js/main.js?v=6"></script>
+<script src="js/payment.js?v=6"></script>
 <script>
   sb.from("site_settings").select("bootcamp_form_link").eq("id", 1).single().then(({ data }) => {
     const link = data?.bootcamp_form_link;

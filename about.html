@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About — Sniper Academy</title>
+<title>About | Sniper Academy</title>
 <meta name="description" content="Why Sniper Academy exists and the philosophy behind the curriculum.">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=6">
 </head>
 <body>
 
@@ -54,7 +54,7 @@
     <div class="container reveal">
       <span class="eyebrow">About</span>
       <h1>A sniper takes one shot. Not a hundred guesses.</h1>
-      <p class="lede">Sniper Academy exists because most trading education teaches indicators, not decisions. This is the story behind the curriculum — replace with your own founder story when ready.</p>
+      <p class="lede">Sniper Academy exists because most trading education teaches indicators, not decisions. This is the story behind the curriculum, replace it with your own founder story when ready.</p>
     </div>
   </section>
 
@@ -68,7 +68,7 @@
         <span class="eyebrow">The founder</span>
         <h2 style="margin-top:14px; font-size:clamp(24px,3.2vw,32px);">[Founder name] — swap in the real story here.</h2>
         <p class="text-muted" style="margin-top:16px;">Placeholder copy: a short account of how this trading approach was developed, the losses that shaped the risk-management module, and why the academy is built around discipline instead of prediction. Replace this paragraph with the real founder story.</p>
-        <p class="text-muted" style="margin-top:14px;">A second paragraph on what makes the teaching style different — direct mentorship, live tape review, and a curriculum that doesn't skip the psychology module most courses ignore.</p>
+        <p class="text-muted" style="margin-top:14px;">A second paragraph on what makes the teaching style different: direct mentorship, live tape review, and a curriculum that doesn't skip the psychology module most courses ignore.</p>
       </div>
     </div>
   </section>
@@ -141,7 +141,7 @@
           </span>
           <img data-logo-custom class="logo-mark" alt="Sniper Academy" style="display:none;">
         </a>
-        <p>A systematic approach to trading — institutional frameworks, execution discipline, and risk management.</p>
+        <p>A systematic approach to trading: institutional frameworks, execution discipline, and risk management.</p>
       </div>
       <div class="footer-col">
         <h4>Site</h4>
@@ -196,12 +196,12 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/config.js"></script>
-<script src="js/supabase-client.js"></script>
-<script src="js/site-media.js"></script>
-<script src="js/community-signup.js"></script>
-<script src="js/main.js"></script>
-<script src="js/payment.js"></script>
+<script src="js/config.js?v=6"></script>
+<script src="js/supabase-client.js?v=6"></script>
+<script src="js/site-media.js?v=6"></script>
+<script src="js/community-signup.js?v=6"></script>
+<script src="js/main.js?v=6"></script>
+<script src="js/payment.js?v=6"></script>
 <script>
   sb.from("team_members").select("*").order("sort_order", { ascending: true }).then(({ data, error }) => {
     const grid = document.getElementById("team-grid");
