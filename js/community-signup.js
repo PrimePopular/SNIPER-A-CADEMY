@@ -1,19 +1,11 @@
 // ==========================================================================
-// SNIPER ACADEMY — community join flow
-// Email in -> Supabase sends a real confirmation link -> visitor clicks it
-// -> confirm.html marks them verified -> redirected to whatever link the
-// admin has set in site_settings.
+// SNIPER ACADEMY — community join flow (simplified)
+// Email in -> saved straight to the subscribers table -> immediate
+// redirect to whatever community link the admin has set.
+// No confirmation email step — that was the source of nearly every
+// subscriber bug (rate limits, redirect URL config, silent failures).
+// This is simpler and more reliable: one step, not two.
 // ==========================================================================
-
-// Builds the confirm.html URL correctly even when the site lives in a
-// subfolder (e.g. GitHub Pages project sites like
-// username.github.io/repo-name/) — window.location.origin alone drops
-// that subfolder and breaks the confirmation link.
-function siteBaseUrl() {
-  const path = window.location.pathname;
-  const dir = path.substring(0, path.lastIndexOf("/") + 1);
-  return window.location.origin + dir;
-}
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("join-form");
@@ -26,43 +18,30 @@ document.addEventListener("DOMContentLoaded", () => {
     const submitBtn = form.querySelector("button[type=submit]");
 
     submitBtn.disabled = true;
-    submitBtn.textContent = "Sending...";
+    submitBtn.textContent = "Joining...";
     showStatus("");
 
     try {
-      // Record the interest immediately (verified starts false).
       const { error: subError } = await sb.from("subscribers").upsert(
-        { email, source: "join_modal" },
+        { email, source: "join_modal", verified: true },
         { onConflict: "email" }
       );
-      if (subError) {
-        // This used to be silently ignored, which is exactly why emails
-        // looked like they "weren't collecting" — surface it now.
-        console.error("[join-form] couldn't save subscriber:", subError.message);
-      }
+      if (subError) throw subError;
 
-      // Supabase sends the actual confirmation email. Clicking it lands on
-      // confirm.html, which finishes verification and redirects.
-      const { error } = await sb.auth.signInWithOtp({
-        email,
-        options: { emailRedirectTo: `${siteBaseUrl()}confirm.html` },
-      });
+      const { data: settings } = await sb
+        .from("site_settings")
+        .select("community_link")
+        .eq("id", 1)
+        .single();
 
-      if (error) throw error;
-
-      showStatus("Check your email — click the confirmation link to get your invite.", "ok");
-      form.reset();
+      const link = settings?.community_link || FALLBACK_COMMUNITY_LINK;
+      showStatus("You're in — redirecting...", "ok");
+      setTimeout(() => { window.location.href = link; }, 600);
     } catch (err) {
       console.error("[join-form]", err);
-      const raw = (err.message || "").toLowerCase();
-      let msg = err.message || "Something went wrong — try again in a moment.";
-      if (raw.includes("rate limit") || raw.includes("too many")) {
-        msg = "Too many attempts right now — Supabase's free plan limits how many confirmation emails send per hour. Wait a bit and try again.";
-      }
-      showStatus(msg, "error");
-    } finally {
+      showStatus(err.message || "Something went wrong — try again in a moment.", "error");
       submitBtn.disabled = false;
-      submitBtn.textContent = "Send confirmation link";
+      submitBtn.textContent = "Join now";
     }
   });
 

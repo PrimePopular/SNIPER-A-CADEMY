@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("team-form").addEventListener("submit", handleAddTeamMember);
   document.getElementById("testimonial-form").addEventListener("submit", handleAddTestimonial);
   document.getElementById("settings-form").addEventListener("submit", handleSaveSettings);
+  document.getElementById("bootcamp-link-form").addEventListener("submit", handleSaveBootcampLink);
   document.getElementById("export-csv").addEventListener("click", exportSubscribersCSV);
 
   document.querySelectorAll("[data-upload-media]").forEach((btn) => {
@@ -340,6 +341,7 @@ async function loadSettings() {
   if (!data) return;
   document.getElementById("set-platform").value = data.community_platform || "";
   document.getElementById("set-link").value = data.community_link || "";
+  document.getElementById("set-bootcamp-link").value = data.bootcamp_form_link || "";
 }
 
 async function handleSaveSettings(e) {
@@ -349,6 +351,14 @@ async function handleSaveSettings(e) {
   const { error } = await sb.from("site_settings").update({ community_platform, community_link }).eq("id", 1);
   if (error) { toast("Couldn't save settings"); return; }
   toast("Settings saved");
+}
+
+async function handleSaveBootcampLink(e) {
+  e.preventDefault();
+  const bootcamp_form_link = document.getElementById("set-bootcamp-link").value.trim();
+  const { error } = await sb.from("site_settings").update({ bootcamp_form_link }).eq("id", 1);
+  if (error) { toast("Couldn't save link"); return; }
+  toast("Bootcamp form link saved");
 }
 
 function escapeHtml(str) {

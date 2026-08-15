@@ -8,7 +8,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const { data, error } = await sb
     .from("site_settings")
-    .select("logo_url, mentorship_video_url, bootcamp_video_url, founder_photo_url")
+    .select("logo_url, home_video_url, mentorship_video_url, bootcamp_video_url, founder_photo_url")
     .eq("id", 1)
     .single();
 
@@ -20,6 +20,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       img.style.display = "block";
     });
     document.querySelectorAll("[data-logo-default]").forEach((el) => { el.style.display = "none"; });
+  }
+
+  if (data.home_video_url) {
+    document.querySelectorAll("[data-home-video]").forEach((video) => {
+      video.querySelector("source").src = data.home_video_url;
+      video.load();
+      const wrapper = video.closest("[data-video-wrapper]");
+      if (wrapper) wrapper.classList.remove("video-fallback");
+      video.addEventListener("loadeddata", () => { if (wrapper) wrapper.classList.remove("video-fallback"); });
+    });
   }
 
   if (data.mentorship_video_url) {
