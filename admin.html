@@ -145,21 +145,28 @@
     </div>
 
     <div class="card" style="padding:22px; margin-bottom:16px; max-width:560px;">
-      <span class="eyebrow">2 · Appears on: Home page + Academy page (Mentorship section)</span>
-      <h4 style="font-size:16px; margin-top:8px;">Mentorship preview video</h4>
+      <span class="eyebrow">2 · Appears on: Home page (video section, below Mentorship & Community)</span>
+      <h4 style="font-size:16px; margin-top:8px;">Home page video</h4>
+      <div style="margin-top:14px;"><input type="file" id="media-home" accept="video/*"></div>
+      <div style="display:flex; gap:10px; margin-top:12px;"><button class="btn btn-ghost" data-upload-media="home_video_url" data-input="media-home" style="padding:8px 16px; font-size:13px;">Upload video</button><button class="btn btn-ghost" data-remove-media="home_video_url" style="padding:8px 16px; font-size:13px; color:var(--text-faint);">Remove (use default)</button></div>
+    </div>
+
+    <div class="card" style="padding:22px; margin-bottom:16px; max-width:560px;">
+      <span class="eyebrow">3 · Appears on: Academy page (Mentorship & Community section)</span>
+      <h4 style="font-size:16px; margin-top:8px;">Academy mentorship video</h4>
       <div style="margin-top:14px;"><input type="file" id="media-mentorship" accept="video/*"></div>
       <div style="display:flex; gap:10px; margin-top:12px;"><button class="btn btn-ghost" data-upload-media="mentorship_video_url" data-input="media-mentorship" style="padding:8px 16px; font-size:13px;">Upload video</button><button class="btn btn-ghost" data-remove-media="mentorship_video_url" style="padding:8px 16px; font-size:13px; color:var(--text-faint);">Remove (use default)</button></div>
     </div>
 
     <div class="card" style="padding:22px; margin-bottom:16px; max-width:560px;">
-      <span class="eyebrow">3 · Appears on: Bootcamp page (background behind signup)</span>
+      <span class="eyebrow">4 · Appears on: Bootcamp page (background behind signup)</span>
       <h4 style="font-size:16px; margin-top:8px;">Bootcamp hero video</h4>
       <div style="margin-top:14px;"><input type="file" id="media-bootcamp" accept="video/*"></div>
       <div style="display:flex; gap:10px; margin-top:12px;"><button class="btn btn-ghost" data-upload-media="bootcamp_video_url" data-input="media-bootcamp" style="padding:8px 16px; font-size:13px;">Upload video</button><button class="btn btn-ghost" data-remove-media="bootcamp_video_url" style="padding:8px 16px; font-size:13px; color:var(--text-faint);">Remove (use default)</button></div>
     </div>
 
     <div class="card" style="padding:22px; max-width:560px;">
-      <span class="eyebrow">4 · Appears on: About page (founder story)</span>
+      <span class="eyebrow">5 · Appears on: About page (founder story)</span>
       <h4 style="font-size:16px; margin-top:8px;">Founder photo</h4>
       <div style="margin-top:14px;"><input type="file" id="media-founder" accept="image/*"></div>
       <div style="display:flex; gap:10px; margin-top:12px;"><button class="btn btn-ghost" data-upload-media="founder_photo_url" data-input="media-founder" style="padding:8px 16px; font-size:13px;">Upload photo</button><button class="btn btn-ghost" data-remove-media="founder_photo_url" style="padding:8px 16px; font-size:13px; color:var(--text-faint);">Remove (use default)</button></div>
@@ -168,9 +175,9 @@
 
   <!-- SETTINGS -->
   <div class="admin-panel" id="panel-settings">
-    <div class="card" style="padding:24px; max-width:480px;">
+    <div class="card" style="padding:24px; max-width:480px; margin-bottom:20px;">
       <h4 style="font-size:15px;">Community redirect</h4>
-      <p class="text-muted" style="font-size:13.5px; margin-top:6px;">Everyone who confirms their email from the Join button gets sent here. Change it any time — takes effect immediately.</p>
+      <p class="text-muted" style="font-size:13.5px; margin-top:6px;">Everyone who joins from the Join button gets sent here. Change it any time — takes effect immediately.</p>
       <form id="settings-form" style="margin-top:18px;">
         <div class="field">
           <label>Platform name</label>
@@ -179,6 +186,18 @@
         <div class="field">
           <label>Group link</label>
           <input type="url" id="set-link" placeholder="https://...">
+        </div>
+        <button class="btn btn-primary" type="submit">Save</button>
+      </form>
+    </div>
+
+    <div class="card" style="padding:24px; max-width:480px;">
+      <h4 style="font-size:15px;">Bootcamp signup form</h4>
+      <p class="text-muted" style="font-size:13.5px; margin-top:6px;">Paste your Google Form (or Typeform, etc.) link here — the "Access 3-Day Free Bootcamp" button on the Bootcamp page goes straight to it. Change it any time, no code needed.</p>
+      <form id="bootcamp-link-form" style="margin-top:18px;">
+        <div class="field">
+          <label>Form link</label>
+          <input type="url" id="set-bootcamp-link" placeholder="https://forms.gle/...">
         </div>
         <button class="btn btn-primary" type="submit">Save</button>
       </form>
