@@ -31,10 +31,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       // Record the interest immediately (verified starts false).
-      await sb.from("subscribers").upsert(
+      const { error: subError } = await sb.from("subscribers").upsert(
         { email, source: "join_modal" },
-        { onConflict: "email", ignoreDuplicates: false }
+        { onConflict: "email" }
       );
+      if (subError) {
+        // This used to be silently ignored, which is exactly why emails
+        // looked like they "weren't collecting" — surface it now.
+        console.error("[join-form] couldn't save subscriber:", subError.message);
+      }
 
       // Supabase sends the actual confirmation email. Clicking it lands on
       // confirm.html, which finishes verification and redirects.

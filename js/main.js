@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initJoinModal();
   initScrollReveal();
   initVideoFallback();
+  initVideoPreviews();
   initPaymentStubs();
   initBootcampForm();
   initContactForm();
@@ -163,6 +164,25 @@ function initContactForm() {
       status.style.color = "var(--accent-bright)";
     }
     form.reset();
+  });
+}
+
+// ---- Playable video previews (the "mentorship preview" play button) ----
+function initVideoPreviews() {
+  document.querySelectorAll(".video-preview").forEach((wrapper) => {
+    const video = wrapper.querySelector("video");
+    const playBtn = wrapper.querySelector(".play-btn");
+    if (!video || !playBtn) return;
+
+    playBtn.addEventListener("click", () => {
+      video.muted = false;
+      video.controls = true;
+      video.play();
+      wrapper.classList.add("playing");
+    });
+
+    video.addEventListener("pause", () => wrapper.classList.remove("playing"));
+    video.addEventListener("ended", () => wrapper.classList.remove("playing"));
   });
 }
 
