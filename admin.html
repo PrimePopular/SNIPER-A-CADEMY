@@ -8,9 +8,10 @@
 <link rel="stylesheet" href="css/style.css">
 <style>
   .admin-shell { max-width: 980px; margin: 0 auto; padding: 48px 24px 100px; }
-  .admin-tabs { display: flex; gap: 8px; margin-bottom: 32px; flex-wrap: wrap; border-bottom: 1px solid var(--border); padding-bottom: 0; }
-  .admin-tab { padding: 12px 18px; font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); border-bottom: 2px solid transparent; }
-  .admin-tab.active { color: var(--text); border-color: var(--accent); }
+  .admin-tabs { display: flex; gap: 4px; margin-bottom: 32px; flex-wrap: wrap; border-bottom: 1px solid var(--border); padding-bottom: 0; }
+  .admin-tab { padding: 12px 18px; font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); border-bottom: 2px solid transparent; border-radius: 8px 8px 0 0; cursor: pointer; background: none; transition: background 0.15s, color 0.15s; }
+  .admin-tab:hover { color: var(--text); background: var(--bg-elevated); }
+  .admin-tab.active { color: #fff; background: var(--accent); border-color: var(--accent); font-weight: 600; }
   .admin-panel { display: none; }
   .admin-panel.active { display: block; }
   .admin-row { display: flex; gap: 16px; align-items: flex-start; padding: 18px 0; border-top: 1px solid var(--border); }
