@@ -21,11 +21,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.getElementById("event-form").addEventListener("submit", handleAddEvent);
   document.getElementById("team-form").addEventListener("submit", handleAddTeamMember);
+  document.getElementById("testimonial-form").addEventListener("submit", handleAddTestimonial);
   document.getElementById("settings-form").addEventListener("submit", handleSaveSettings);
   document.getElementById("export-csv").addEventListener("click", exportSubscribersCSV);
 
   document.querySelectorAll("[data-upload-media]").forEach((btn) => {
     btn.addEventListener("click", () => handleSiteMediaUpload(btn));
+  });
+  document.querySelectorAll("[data-remove-media]").forEach((btn) => {
+    btn.addEventListener("click", () => handleSiteMediaRemove(btn));
   });
 });
 
@@ -36,6 +40,7 @@ function showDashboard() {
   dashboard.style.display = "block";
   loadEvents();
   loadTeam();
+  loadTestimonials();
   loadSubscribers();
   loadSettings();
 }
@@ -200,6 +205,60 @@ async function loadTeam() {
   });
 }
 
+// ---- TESTIMONIALS ----
+async function handleAddTestimonial(e) {
+  e.preventDefault();
+  const quote = document.getElementById("ts-quote").value.trim();
+  const name = document.getElementById("ts-name").value.trim();
+  const handle = document.getElementById("ts-handle").value.trim();
+  const photoFile = document.getElementById("ts-photo").files[0];
+  const submitBtn = e.target.querySelector("button[type=submit]");
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Saving...";
+  try {
+    const { url } = await uploadMedia(photoFile, "testimonials");
+    const { error } = await sb.from("testimonials").insert({ quote, name, handle, photo_url: url });
+    if (error) throw error;
+    e.target.reset();
+    toast("Testimonial added");
+    loadTestimonials();
+  } catch (err) {
+    console.error(err);
+    toast(`Couldn't save that testimonial — ${err.message || "try again"}`);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Add testimonial";
+  }
+}
+
+async function loadTestimonials() {
+  const list = document.getElementById("testimonials-list");
+  const { data, error } = await sb.from("testimonials").select("*").order("sort_order", { ascending: true });
+  if (error) { list.innerHTML = `<p class="text-muted">Couldn't load testimonials.</p>`; return; }
+  if (!data.length) { list.innerHTML = `<p class="text-muted" style="margin-top:12px;">No testimonials yet.</p>`; return; }
+
+  list.innerHTML = data.map((ts) => `
+    <div class="admin-row">
+      ${ts.photo_url ? `<img class="thumb" src="${ts.photo_url}" alt="">` : `<div class="thumb"></div>`}
+      <div class="grow">
+        <strong>${escapeHtml(ts.name)}</strong>
+        <div class="meta">${escapeHtml(ts.quote).slice(0, 60)}${ts.quote.length > 60 ? "..." : ""}</div>
+      </div>
+      <div class="row-actions">
+        <button class="icon-btn" data-delete-testimonial="${ts.id}" aria-label="Delete">✕</button>
+      </div>
+    </div>`).join("");
+
+  list.querySelectorAll("[data-delete-testimonial]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      if (!confirm("Delete this testimonial?")) return;
+      await sb.from("testimonials").delete().eq("id", btn.dataset.deleteTestimonial);
+      loadTestimonials();
+    });
+  });
+}
+
 // ---- SUBSCRIBERS ----
 let cachedSubscribers = [];
 
@@ -250,6 +309,25 @@ async function handleSiteMediaUpload(btn) {
   } catch (err) {
     console.error(err);
     toast(`Couldn't upload — ${err.message || "try again"}`);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+}
+
+async function handleSiteMediaRemove(btn) {
+  const column = btn.dataset.removeMedia;
+  if (!confirm("Remove this and go back to the site's default?")) return;
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = "Removing...";
+  try {
+    const { error } = await sb.from("site_settings").update({ [column]: null }).eq("id", 1);
+    if (error) throw error;
+    toast("Reverted to default");
+  } catch (err) {
+    console.error(err);
+    toast("Couldn't remove — try again.");
   } finally {
     btn.disabled = false;
     btn.textContent = originalText;

@@ -26,6 +26,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.querySelectorAll("[data-mentorship-video]").forEach((video) => {
       video.querySelector("source").src = data.mentorship_video_url;
       video.load();
+      const wrapper = video.closest("[data-video-wrapper]");
+      if (wrapper) wrapper.classList.remove("video-fallback");
+      video.addEventListener("loadeddata", () => { if (wrapper) wrapper.classList.remove("video-fallback"); });
     });
   }
 
@@ -33,6 +36,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.querySelectorAll("[data-bootcamp-video]").forEach((video) => {
       video.querySelector("source").src = data.bootcamp_video_url;
       video.load();
+      const wrapper = video.closest("[data-video-wrapper]");
+      if (wrapper) wrapper.classList.remove("video-fallback");
+      video.addEventListener("loadeddata", () => { if (wrapper) wrapper.classList.remove("video-fallback"); });
     });
   }
 
