@@ -185,17 +185,8 @@
       </div>
     </div>
     <div class="testimonial-track-wrap reveal">
-      <div class="testimonial-track">
-        <!-- Placeholder cards — swap quote/name/handle with real member testimonials. Duplicated once below for the seamless scroll loop. -->
-        <div class="testimonial-card card"><p class="quote">"Add a real testimonial from a member here — one specific result or shift in how they trade."</p><div class="who"><div class="avatar">M1</div><div><div class="name">Member Name</div><div class="handle">@handle</div></div></div></div>
-        <div class="testimonial-card card"><p class="quote">"Second placeholder testimonial — keep it specific, not generic praise."</p><div class="who"><div class="avatar">M2</div><div><div class="name">Member Name</div><div class="handle">@handle</div></div></div></div>
-        <div class="testimonial-card card"><p class="quote">"Third placeholder — swap for a screenshot-worthy quote from Discord or Telegram."</p><div class="who"><div class="avatar">M3</div><div><div class="name">Member Name</div><div class="handle">@handle</div></div></div></div>
-        <div class="testimonial-card card"><p class="quote">"Fourth placeholder testimonial slot, ready for a real member story."</p><div class="who"><div class="avatar">M4</div><div><div class="name">Member Name</div><div class="handle">@handle</div></div></div></div>
-        <!-- duplicate set for the infinite scroll effect -->
-        <div class="testimonial-card card" aria-hidden="true"><p class="quote">"Add a real testimonial from a member here — one specific result or shift in how they trade."</p><div class="who"><div class="avatar">M1</div><div><div class="name">Member Name</div><div class="handle">@handle</div></div></div></div>
-        <div class="testimonial-card card" aria-hidden="true"><p class="quote">"Second placeholder testimonial — keep it specific, not generic praise."</p><div class="who"><div class="avatar">M2</div><div><div class="name">Member Name</div><div class="handle">@handle</div></div></div></div>
-        <div class="testimonial-card card" aria-hidden="true"><p class="quote">"Third placeholder — swap for a screenshot-worthy quote from Discord or Telegram."</p><div class="who"><div class="avatar">M3</div><div><div class="name">Member Name</div><div class="handle">@handle</div></div></div></div>
-        <div class="testimonial-card card" aria-hidden="true"><p class="quote">"Fourth placeholder testimonial slot, ready for a real member story."</p><div class="who"><div class="avatar">M4</div><div><div class="name">Member Name</div><div class="handle">@handle</div></div></div></div>
+      <div class="testimonial-track" id="testimonial-track">
+        <p class="text-muted" style="padding:0 24px;">Loading testimonials...</p>
       </div>
     </div>
   </section>
@@ -340,6 +331,25 @@
 <script>
   fetchEvents().then((events) => {
     renderCountdownCards(events, document.getElementById("home-events-list"), { limit: 3 });
+  });
+
+  sb.from("testimonials").select("*").order("sort_order", { ascending: true }).then(({ data, error }) => {
+    const track = document.getElementById("testimonial-track");
+    if (error || !data || !data.length) {
+      track.innerHTML = `<p class="text-muted" style="padding:0 24px;">Testimonials coming soon.</p>`;
+      track.style.animation = "none";
+      return;
+    }
+    const cardHtml = (ts) => `
+      <div class="testimonial-card card">
+        <p class="quote">"${ts.quote}"</p>
+        <div class="who">
+          ${ts.photo_url ? `<img class="avatar" src="${ts.photo_url}" alt="" style="object-fit:cover;">` : `<div class="avatar">${ts.name.slice(0,2).toUpperCase()}</div>`}
+          <div><div class="name">${ts.name}</div>${ts.handle ? `<div class="handle">${ts.handle}</div>` : ""}</div>
+        </div>
+      </div>`;
+    // Duplicate the set once so the marquee scroll loops seamlessly.
+    track.innerHTML = data.map(cardHtml).join("") + data.map(cardHtml).join("");
   });
 </script>
 </body>

@@ -58,6 +58,7 @@
   <div class="admin-tabs">
     <button class="admin-tab active" data-tab="events">Events</button>
     <button class="admin-tab" data-tab="team">Team</button>
+    <button class="admin-tab" data-tab="testimonials">Testimonials</button>
     <button class="admin-tab" data-tab="subscribers">Subscribers</button>
     <button class="admin-tab" data-tab="media">Site Media</button>
     <button class="admin-tab" data-tab="settings">Settings</button>
@@ -101,6 +102,24 @@
     </div>
   </div>
 
+  <!-- TESTIMONIALS -->
+  <div class="admin-panel" id="panel-testimonials">
+    <div class="card" style="padding:24px; margin-bottom:24px;">
+      <h4 style="font-size:15px;">Add a testimonial</h4>
+      <form id="testimonial-form" style="margin-top:16px;">
+        <div class="field"><label>Quote</label><textarea id="ts-quote" required></textarea></div>
+        <div class="field"><label>Name</label><input type="text" id="ts-name" required></div>
+        <div class="field"><label>Handle (optional)</label><input type="text" id="ts-handle" placeholder="@handle"></div>
+        <div class="field"><label>Photo (optional)</label><input type="file" id="ts-photo" accept="image/*"></div>
+        <button class="btn btn-primary" type="submit">Add testimonial</button>
+      </form>
+    </div>
+    <div class="card" style="padding:24px;">
+      <h4 style="font-size:15px;">Current testimonials</h4>
+      <div id="testimonials-list"><p class="text-muted" style="margin-top:12px;">Loading...</p></div>
+    </div>
+  </div>
+
   <!-- SUBSCRIBERS -->
   <div class="admin-panel" id="panel-subscribers">
     <div class="card" style="padding:24px;">
@@ -120,28 +139,28 @@
       <span class="eyebrow">1 · Appears on: every page header & footer</span>
       <h4 style="font-size:16px; margin-top:8px;">Site logo</h4>
       <div style="margin-top:14px;"><input type="file" id="media-logo" accept="image/*"></div>
-      <button class="btn btn-ghost" data-upload-media="logo_url" data-input="media-logo" style="margin-top:12px; padding:8px 16px; font-size:13px;">Upload logo</button>
+      <div style="display:flex; gap:10px; margin-top:12px;"><button class="btn btn-ghost" data-upload-media="logo_url" data-input="media-logo" style="padding:8px 16px; font-size:13px;">Upload logo</button><button class="btn btn-ghost" data-remove-media="logo_url" style="padding:8px 16px; font-size:13px; color:var(--text-faint);">Remove (use default)</button></div>
     </div>
 
     <div class="card" style="padding:22px; margin-bottom:16px; max-width:560px;">
       <span class="eyebrow">2 · Appears on: Home page + Academy page (Mentorship section)</span>
       <h4 style="font-size:16px; margin-top:8px;">Mentorship preview video</h4>
       <div style="margin-top:14px;"><input type="file" id="media-mentorship" accept="video/*"></div>
-      <button class="btn btn-ghost" data-upload-media="mentorship_video_url" data-input="media-mentorship" style="margin-top:12px; padding:8px 16px; font-size:13px;">Upload video</button>
+      <div style="display:flex; gap:10px; margin-top:12px;"><button class="btn btn-ghost" data-upload-media="mentorship_video_url" data-input="media-mentorship" style="padding:8px 16px; font-size:13px;">Upload video</button><button class="btn btn-ghost" data-remove-media="mentorship_video_url" style="padding:8px 16px; font-size:13px; color:var(--text-faint);">Remove (use default)</button></div>
     </div>
 
     <div class="card" style="padding:22px; margin-bottom:16px; max-width:560px;">
       <span class="eyebrow">3 · Appears on: Bootcamp page (background behind signup)</span>
       <h4 style="font-size:16px; margin-top:8px;">Bootcamp hero video</h4>
       <div style="margin-top:14px;"><input type="file" id="media-bootcamp" accept="video/*"></div>
-      <button class="btn btn-ghost" data-upload-media="bootcamp_video_url" data-input="media-bootcamp" style="margin-top:12px; padding:8px 16px; font-size:13px;">Upload video</button>
+      <div style="display:flex; gap:10px; margin-top:12px;"><button class="btn btn-ghost" data-upload-media="bootcamp_video_url" data-input="media-bootcamp" style="padding:8px 16px; font-size:13px;">Upload video</button><button class="btn btn-ghost" data-remove-media="bootcamp_video_url" style="padding:8px 16px; font-size:13px; color:var(--text-faint);">Remove (use default)</button></div>
     </div>
 
     <div class="card" style="padding:22px; max-width:560px;">
       <span class="eyebrow">4 · Appears on: About page (founder story)</span>
       <h4 style="font-size:16px; margin-top:8px;">Founder photo</h4>
       <div style="margin-top:14px;"><input type="file" id="media-founder" accept="image/*"></div>
-      <button class="btn btn-ghost" data-upload-media="founder_photo_url" data-input="media-founder" style="margin-top:12px; padding:8px 16px; font-size:13px;">Upload photo</button>
+      <div style="display:flex; gap:10px; margin-top:12px;"><button class="btn btn-ghost" data-upload-media="founder_photo_url" data-input="media-founder" style="padding:8px 16px; font-size:13px;">Upload photo</button><button class="btn btn-ghost" data-remove-media="founder_photo_url" style="padding:8px 16px; font-size:13px; color:var(--text-faint);">Remove (use default)</button></div>
     </div>
   </div>
 
