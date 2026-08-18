@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("bootcamp-link-form").addEventListener("submit", handleSaveBootcampLink);
   document.getElementById("community-form").addEventListener("submit", handleAddCommunity);
   document.getElementById("contact-email-form").addEventListener("submit", handleSaveContactEmail);
+  document.getElementById("pricing-form").addEventListener("submit", handleSavePricing);
   document.getElementById("export-csv").addEventListener("click", exportSubscribersCSV);
 
   document.querySelectorAll("[data-upload-media]").forEach((btn) => {
@@ -404,6 +405,17 @@ async function loadSettings() {
   document.getElementById("set-link").value = data.community_link || "";
   document.getElementById("set-bootcamp-link").value = data.bootcamp_form_link || "";
   document.getElementById("set-contact-email").value = data.contact_email || "";
+  document.getElementById("set-academy-price").value = data.academy_price || "";
+  document.getElementById("set-mentorship-price").value = data.mentorship_price || "";
+}
+
+async function handleSavePricing(e) {
+  e.preventDefault();
+  const academy_price = Number(document.getElementById("set-academy-price").value) || null;
+  const mentorship_price = Number(document.getElementById("set-mentorship-price").value) || null;
+  const { error } = await sb.from("site_settings").update({ academy_price, mentorship_price }).eq("id", 1);
+  if (error) { toast("Couldn't save pricing"); return; }
+  toast("Pricing saved");
 }
 
 async function handleSaveSettings(e) {
