@@ -24,6 +24,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("testimonial-form").addEventListener("submit", handleAddTestimonial);
   document.getElementById("settings-form").addEventListener("submit", handleSaveSettings);
   document.getElementById("bootcamp-link-form").addEventListener("submit", handleSaveBootcampLink);
+  document.getElementById("community-form").addEventListener("submit", handleAddCommunity);
+  document.getElementById("contact-email-form").addEventListener("submit", handleSaveContactEmail);
   document.getElementById("export-csv").addEventListener("click", exportSubscribersCSV);
 
   document.querySelectorAll("[data-upload-media]").forEach((btn) => {
@@ -43,6 +45,7 @@ function showDashboard() {
   loadTeam();
   loadTestimonials();
   loadSubscribers();
+  loadCommunities();
   loadSettings();
 }
 
@@ -335,6 +338,64 @@ async function handleSiteMediaRemove(btn) {
   }
 }
 
+// ---- COMMUNITIES ----
+async function handleAddCommunity(e) {
+  e.preventDefault();
+  const name = document.getElementById("cm-name").value.trim();
+  const link = document.getElementById("cm-link").value.trim();
+  const submitBtn = e.target.querySelector("button[type=submit]");
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Saving...";
+  try {
+    const { error } = await sb.from("communities").insert({ name, link });
+    if (error) throw error;
+    e.target.reset();
+    toast("Community added");
+    loadCommunities();
+  } catch (err) {
+    console.error(err);
+    toast(`Couldn't save that — ${err.message || "try again"}`);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Add community";
+  }
+}
+
+async function loadCommunities() {
+  const list = document.getElementById("communities-list");
+  const { data, error } = await sb.from("communities").select("*").order("sort_order", { ascending: true });
+  if (error) { list.innerHTML = `<p class="text-muted">Couldn't load communities.</p>`; return; }
+  if (!data.length) { list.innerHTML = `<p class="text-muted" style="margin-top:12px;">No communities added yet.</p>`; return; }
+
+  list.innerHTML = data.map((cm) => `
+    <div class="admin-row">
+      <div class="grow">
+        <strong>${escapeHtml(cm.name)}</strong>
+        <div class="meta">${escapeHtml(cm.link)}</div>
+      </div>
+      <div class="row-actions">
+        <button class="icon-btn" data-delete-community="${cm.id}" aria-label="Delete">✕</button>
+      </div>
+    </div>`).join("");
+
+  list.querySelectorAll("[data-delete-community]").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      if (!confirm("Remove this community?")) return;
+      await sb.from("communities").delete().eq("id", btn.dataset.deleteCommunity);
+      loadCommunities();
+    });
+  });
+}
+
+async function handleSaveContactEmail(e) {
+  e.preventDefault();
+  const contact_email = document.getElementById("set-contact-email").value.trim();
+  const { error } = await sb.from("site_settings").update({ contact_email }).eq("id", 1);
+  if (error) { toast("Couldn't save email"); return; }
+  toast("Contact email saved");
+}
+
 // ---- SETTINGS ----
 async function loadSettings() {
   const { data } = await sb.from("site_settings").select("*").eq("id", 1).single();
@@ -342,6 +403,7 @@ async function loadSettings() {
   document.getElementById("set-platform").value = data.community_platform || "";
   document.getElementById("set-link").value = data.community_link || "";
   document.getElementById("set-bootcamp-link").value = data.bootcamp_form_link || "";
+  document.getElementById("set-contact-email").value = data.contact_email || "";
 }
 
 async function handleSaveSettings(e) {

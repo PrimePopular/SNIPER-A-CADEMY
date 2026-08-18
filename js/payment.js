@@ -8,13 +8,18 @@
 const PAYMENT_CONFIG = {
   bootcamp: {
     label: "3-Day Bootcamp",
-    amount: null,     // TODO: set amount once pricing is confirmed
-    currency: "USD",  // TODO: confirm currency
+    amount: null,      // free — this tier has no paid checkout
+    currency: "NGN",
   },
   academy: {
     label: "Main Academy",
-    amount: null,     // TODO: set amount once pricing is confirmed
-    currency: "USD",
+    amount: 70000,
+    currency: "NGN",
+  },
+  mentorship: {
+    label: "1:1 Mentorship",
+    amount: 100000,
+    currency: "NGN",
   },
 };
 
