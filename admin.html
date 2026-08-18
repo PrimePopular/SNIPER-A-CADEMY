@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin — Sniper Academy</title>
 <meta name="robots" content="noindex, nofollow">
-<link rel="stylesheet" href="css/style.css?v=7">
+<link rel="stylesheet" href="css/style.css?v=8">
 <style>
   .admin-shell { max-width: 980px; margin: 0 auto; padding: 48px 24px 100px; }
   .admin-tabs { display: flex; gap: 4px; margin-bottom: 32px; flex-wrap: wrap; border-bottom: 1px solid var(--border); padding-bottom: 0; }
@@ -194,8 +194,8 @@
   <!-- SETTINGS -->
   <div class="admin-panel" id="panel-settings">
     <div class="card" style="padding:24px; max-width:480px; margin-bottom:20px;">
-      <h4 style="font-size:15px;">Community redirect</h4>
-      <p class="text-muted" style="font-size:13.5px; margin-top:6px;">Everyone who joins from the Join button gets sent here. Change it any time — takes effect immediately.</p>
+      <h4 style="font-size:15px;">"Join Now" button link</h4>
+      <p class="text-muted" style="font-size:13.5px; margin-top:6px;">This is the header "Join Now" button, on every page — separate from the Communities list below. One link (usually your main WhatsApp group). Change it any time, e.g. when a WhatsApp group hits its 250-member cap and you start a new one.</p>
       <form id="settings-form" style="margin-top:18px;">
         <div class="field">
           <label>Platform name</label>
@@ -204,6 +204,22 @@
         <div class="field">
           <label>Group link</label>
           <input type="url" id="set-link" placeholder="https://...">
+        </div>
+        <button class="btn btn-primary" type="submit">Save</button>
+      </form>
+    </div>
+
+    <div class="card" style="padding:24px; max-width:480px; margin-bottom:20px;">
+      <h4 style="font-size:15px;">Pricing</h4>
+      <p class="text-muted" style="font-size:13.5px; margin-top:6px;">Updates the price shown on the homepage pricing cards, in Naira. Just the number — no commas or symbol needed.</p>
+      <form id="pricing-form" style="margin-top:18px;">
+        <div class="field">
+          <label>Academy price (₦)</label>
+          <input type="number" id="set-academy-price" placeholder="70000">
+        </div>
+        <div class="field">
+          <label>1:1 Mentorship price (₦)</label>
+          <input type="number" id="set-mentorship-price" placeholder="100000">
         </div>
         <button class="btn btn-primary" type="submit">Save</button>
       </form>
@@ -238,8 +254,8 @@
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/config.js?v=7"></script>
-<script src="js/supabase-client.js?v=7"></script>
-<script src="js/admin.js?v=7"></script>
+<script src="js/config.js?v=8"></script>
+<script src="js/supabase-client.js?v=8"></script>
+<script src="js/admin.js?v=8"></script>
 </body>
 </html>

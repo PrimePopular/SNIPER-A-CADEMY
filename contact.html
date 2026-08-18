@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contact | Sniper Academy</title>
 <meta name="description" content="Get in touch with Sniper Academy — mentorship applications, partnerships, and general questions.">
-<link rel="stylesheet" href="css/style.css?v=7">
+<link rel="stylesheet" href="css/style.css?v=8">
 </head>
 <body>
 
@@ -176,12 +176,12 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/config.js?v=7"></script>
-<script src="js/supabase-client.js?v=7"></script>
-<script src="js/site-media.js?v=7"></script>
-<script src="js/community-signup.js?v=7"></script>
-<script src="js/main.js?v=7"></script>
-<script src="js/payment.js?v=7"></script>
+<script src="js/config.js?v=8"></script>
+<script src="js/supabase-client.js?v=8"></script>
+<script src="js/site-media.js?v=8"></script>
+<script src="js/community-signup.js?v=8"></script>
+<script src="js/main.js?v=8"></script>
+<script src="js/payment.js?v=8"></script>
 <script>
   document.getElementById("contact-form")?.addEventListener("submit", async function (e) {
     e.preventDefault();
@@ -222,7 +222,7 @@
   sb.from("site_settings").select("contact_email").eq("id", 1).single().then(({ data }) => {
     const emailEl = document.getElementById("display-contact-email");
     if (emailEl && data?.contact_email) {
-      emailEl.textContent = data.contact_email;
+      emailEl.innerHTML = `<a href="mailto:${data.contact_email}" style="color:inherit; text-decoration:underline;">${data.contact_email}</a>`;
     }
   });
 
