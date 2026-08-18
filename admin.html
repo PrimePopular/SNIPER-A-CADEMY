@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin — Sniper Academy</title>
 <meta name="robots" content="noindex, nofollow">
-<link rel="stylesheet" href="css/style.css?v=6">
+<link rel="stylesheet" href="css/style.css?v=7">
 <style>
   .admin-shell { max-width: 980px; margin: 0 auto; padding: 48px 24px 100px; }
   .admin-tabs { display: flex; gap: 4px; margin-bottom: 32px; flex-wrap: wrap; border-bottom: 1px solid var(--border); padding-bottom: 0; }
@@ -60,6 +60,7 @@
     <button class="admin-tab active" data-tab="events">Events</button>
     <button class="admin-tab" data-tab="team">Team</button>
     <button class="admin-tab" data-tab="testimonials">Testimonials</button>
+    <button class="admin-tab" data-tab="communities">Communities</button>
     <button class="admin-tab" data-tab="subscribers">Subscribers</button>
     <button class="admin-tab" data-tab="media">Site Media</button>
     <button class="admin-tab" data-tab="settings">Settings</button>
@@ -119,6 +120,23 @@
     <div class="card" style="padding:24px;">
       <h4 style="font-size:15px;">Current testimonials</h4>
       <div id="testimonials-list"><p class="text-muted" style="margin-top:12px;">Loading...</p></div>
+    </div>
+  </div>
+
+  <!-- COMMUNITIES -->
+  <div class="admin-panel" id="panel-communities">
+    <div class="card" style="padding:24px; margin-bottom:24px;">
+      <h4 style="font-size:15px;">Add a community</h4>
+      <p class="text-muted" style="font-size:13px; margin-top:4px;">Shows up as an option in the "Join Community" picker on the Contact page — add as many as you want (Telegram, Discord, WhatsApp, etc).</p>
+      <form id="community-form" style="margin-top:16px;">
+        <div class="field"><label>Name</label><input type="text" id="cm-name" placeholder="e.g. Telegram, Discord, WhatsApp Channel" required></div>
+        <div class="field"><label>Link</label><input type="url" id="cm-link" placeholder="https://..." required></div>
+        <button class="btn btn-primary" type="submit">Add community</button>
+      </form>
+    </div>
+    <div class="card" style="padding:24px;">
+      <h4 style="font-size:15px;">Current communities</h4>
+      <div id="communities-list"><p class="text-muted" style="margin-top:12px;">Loading...</p></div>
     </div>
   </div>
 
@@ -191,6 +209,18 @@
       </form>
     </div>
 
+    <div class="card" style="padding:24px; max-width:480px; margin-bottom:20px;">
+      <h4 style="font-size:15px;">Public contact email</h4>
+      <p class="text-muted" style="font-size:13.5px; margin-top:6px;">This is the email shown on the Contact page — just for display, doesn't affect where form messages are delivered.</p>
+      <form id="contact-email-form" style="margin-top:18px;">
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="set-contact-email" placeholder="you@email.com">
+        </div>
+        <button class="btn btn-primary" type="submit">Save</button>
+      </form>
+    </div>
+
     <div class="card" style="padding:24px; max-width:480px;">
       <h4 style="font-size:15px;">Bootcamp signup form</h4>
       <p class="text-muted" style="font-size:13.5px; margin-top:6px;">Paste your Google Form (or Typeform, etc.) link here — the "Access 3-Day Free Bootcamp" button on the Bootcamp page goes straight to it. Change it any time, no code needed.</p>
@@ -208,8 +238,8 @@
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/config.js?v=6"></script>
-<script src="js/supabase-client.js?v=6"></script>
-<script src="js/admin.js?v=6"></script>
+<script src="js/config.js?v=7"></script>
+<script src="js/supabase-client.js?v=7"></script>
+<script src="js/admin.js?v=7"></script>
 </body>
 </html>

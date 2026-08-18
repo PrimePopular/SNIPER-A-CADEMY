@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contact | Sniper Academy</title>
 <meta name="description" content="Get in touch with Sniper Academy — mentorship applications, partnerships, and general questions.">
-<link rel="stylesheet" href="css/style.css?v=6">
+<link rel="stylesheet" href="css/style.css?v=7">
 </head>
 <body>
 
@@ -92,13 +92,14 @@
       <div>
         <div class="stat-block card">
           <div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 7L12 13L21 7" stroke="currentColor" stroke-width="1.6"/></svg></div>
-          <div><div class="title">Email</div><div class="sub">contact@sniperacademy.example (replace with your real address)</div></div>
+          <div><div class="title">Email</div><div class="sub" id="display-contact-email">Loading...</div></div>
         </div>
         <div class="stat-block card" style="margin-top:12px;">
           <div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="9" r="3" stroke="currentColor" stroke-width="1.6"/><circle cx="17" cy="9" r="2.4" stroke="currentColor" stroke-width="1.6"/><path d="M3 19C3 15.5 5.5 13 9 13C11.2 13 13 14 14 15.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M14.5 13.5C16.5 13.7 18.5 14.8 19 17.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
           <div><div class="title">Community</div><div class="sub">Fastest way to reach us, join via the button below</div></div>
         </div>
-        <button class="btn btn-ghost" style="margin-top:24px; width:100%;" data-open-join>Join the Telegram community</button>
+        <button class="btn btn-ghost" style="margin-top:24px; width:100%;" id="community-picker-btn">Join Community</button>
+        <div id="community-picker-list" style="display:none; margin-top:12px; flex-direction:column; gap:8px;"></div>
       </div>
     </div>
   </section>
@@ -175,26 +176,69 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/config.js?v=6"></script>
-<script src="js/supabase-client.js?v=6"></script>
-<script src="js/site-media.js?v=6"></script>
-<script src="js/community-signup.js?v=6"></script>
-<script src="js/main.js?v=6"></script>
-<script src="js/payment.js?v=6"></script>
+<script src="js/config.js?v=7"></script>
+<script src="js/supabase-client.js?v=7"></script>
+<script src="js/site-media.js?v=7"></script>
+<script src="js/community-signup.js?v=7"></script>
+<script src="js/main.js?v=7"></script>
+<script src="js/payment.js?v=7"></script>
 <script>
-  // Placeholder submit handler. TODO: wire to a real backend (e.g. Web3Forms, like My Prime Resume uses).
-  document.getElementById("contact-form")?.addEventListener("submit", function (e) {
+  document.getElementById("contact-form")?.addEventListener("submit", async function (e) {
     e.preventDefault();
-    console.log("[contact-form] submitted — not yet connected to a backend.");
-    alert("Message received! (Form isn't connected to a backend yet — wire it up when ready.)");
-    this.reset();
+    const submitBtn = this.querySelector("button[type=submit]");
+    const name = document.getElementById("c-name").value.trim();
+    const email = document.getElementById("c-email").value.trim();
+    const reason = document.getElementById("c-reason").value;
+    const message = document.getElementById("c-message").value.trim();
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sending...";
+
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          subject: `Sniper Academy contact — ${reason}`,
+          from_name: name,
+          name, email, reason, message,
+        }),
+      });
+      const result = await res.json();
+      if (!result.success) throw new Error(result.message || "Send failed");
+
+      alert("Message sent — you'll hear back soon.");
+      this.reset();
+    } catch (err) {
+      console.error("[contact-form]", err);
+      alert("Couldn't send that — please try again in a moment, or reach out via the community link below.");
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Send message";
+    }
   });
 
-  sb.from("site_settings").select("community_platform").eq("id", 1).single().then(({ data }) => {
-    const btn = document.querySelector("[data-open-join].btn-ghost");
-    if (btn && data?.community_platform) {
-      btn.textContent = `Join the ${data.community_platform} community`;
+  sb.from("site_settings").select("contact_email").eq("id", 1).single().then(({ data }) => {
+    const emailEl = document.getElementById("display-contact-email");
+    if (emailEl && data?.contact_email) {
+      emailEl.textContent = data.contact_email;
     }
+  });
+
+  document.getElementById("community-picker-btn").addEventListener("click", async () => {
+    const listEl = document.getElementById("community-picker-list");
+    if (listEl.style.display === "flex") { listEl.style.display = "none"; return; }
+
+    const { data, error } = await sb.from("communities").select("*").order("sort_order", { ascending: true });
+    if (error || !data || !data.length) {
+      listEl.innerHTML = `<p class="text-muted" style="font-size:13.5px;">No communities added yet.</p>`;
+    } else {
+      listEl.innerHTML = data.map((cm) =>
+        `<a href="${cm.link}" target="_blank" rel="noopener" class="btn btn-ghost" style="width:100%;">${cm.name}</a>`
+      ).join("");
+    }
+    listEl.style.display = "flex";
   });
 </script>
 </body>

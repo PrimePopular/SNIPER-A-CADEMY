@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>3-Day Bootcamp | Sniper Academy</title>
 <meta name="description" content="A free 3-day bootcamp: a short, structured intro to the Sniper Academy framework before you decide to go deeper.">
-<link rel="stylesheet" href="css/style.css?v=6">
+<link rel="stylesheet" href="css/style.css?v=7">
 </head>
 <body>
 
@@ -58,7 +58,7 @@
   -->
   <section class="video-hero">
     <div class="video-hero-bg" data-video-wrapper>
-      <video data-bg-video data-bootcamp-video autoplay muted loop playsinline poster="">
+      <video data-bg-video data-bootcamp-video autoplay muted loop playsinline preload="auto" poster="">
         <source src="assets/video/bootcamp-intro.mp4" type="video/mp4">
       </video>
     </div>
@@ -72,9 +72,15 @@
       <div class="signup-card card glass reveal">
         <span class="eyebrow">Reserve your spot</span>
         <h3 style="margin-top:12px;">Start the free bootcamp</h3>
-        <p class="text-muted" style="margin-top:10px; font-size:14px;">Click below to sign up. It takes you to the registration form.</p>
-        <a href="#" id="bootcamp-form-link" class="btn btn-primary" style="width:100%; margin-top:18px;">Access 3-Day Free Bootcamp</a>
-        <p id="bootcamp-form-missing" class="text-muted" style="margin-top:12px; font-size:12.5px; display:none;">Signup form link isn't set yet. Add it in admin under Settings.</p>
+        <p class="text-muted" style="margin-top:10px; font-size:14px;">Enter your email, then you'll be taken to the registration form.</p>
+        <form id="bootcamp-email-form" style="margin-top:18px;">
+          <div class="field" style="margin-bottom:14px;">
+            <label for="bc-email">Email</label>
+            <input type="email" id="bc-email" placeholder="you@email.com" required>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;">Access 3-Day Free Bootcamp</button>
+        </form>
+        <p id="bootcamp-status" style="margin-top:12px; font-size:13.5px; display:none;"></p>
       </div>
     </div>
   </section>
@@ -188,23 +194,48 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/config.js?v=6"></script>
-<script src="js/supabase-client.js?v=6"></script>
-<script src="js/site-media.js?v=6"></script>
-<script src="js/community-signup.js?v=6"></script>
-<script src="js/main.js?v=6"></script>
-<script src="js/payment.js?v=6"></script>
+<script src="js/config.js?v=7"></script>
+<script src="js/supabase-client.js?v=7"></script>
+<script src="js/site-media.js?v=7"></script>
+<script src="js/community-signup.js?v=7"></script>
+<script src="js/main.js?v=7"></script>
+<script src="js/payment.js?v=7"></script>
 <script>
-  sb.from("site_settings").select("bootcamp_form_link").eq("id", 1).single().then(({ data }) => {
-    const link = data?.bootcamp_form_link;
-    const btn = document.getElementById("bootcamp-form-link");
-    const missing = document.getElementById("bootcamp-form-missing");
-    if (link) {
-      btn.href = link;
-      btn.target = "_blank";
-      btn.rel = "noopener";
-    } else {
-      missing.style.display = "block";
+  document.getElementById("bootcamp-email-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("bc-email").value.trim();
+    const statusEl = document.getElementById("bootcamp-status");
+    const submitBtn = e.target.querySelector("button[type=submit]");
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "One moment...";
+    statusEl.style.display = "none";
+
+    try {
+      const { error: subError } = await sb.from("subscribers").upsert(
+        { email, source: "bootcamp", verified: true },
+        { onConflict: "email" }
+      );
+      if (subError) throw subError;
+
+      const { data } = await sb.from("site_settings").select("bootcamp_form_link").eq("id", 1).single();
+      const link = data?.bootcamp_form_link;
+
+      if (link) {
+        window.location.href = link;
+      } else {
+        statusEl.textContent = "You're on the list — the registration form link isn't set yet, add it in admin under Settings.";
+        statusEl.style.color = "var(--accent-bright)";
+        statusEl.style.display = "block";
+      }
+    } catch (err) {
+      console.error("[bootcamp-email-form]", err);
+      statusEl.textContent = err.message || "Something went wrong — try again in a moment.";
+      statusEl.style.color = "#ff6b6b";
+      statusEl.style.display = "block";
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Access 3-Day Free Bootcamp";
     }
   });
 </script>
