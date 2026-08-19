@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin — Sniper Academy</title>
 <meta name="robots" content="noindex, nofollow">
-<link rel="stylesheet" href="css/style.css?v=8">
+<link rel="stylesheet" href="css/style.css?v=9">
 <style>
   .admin-shell { max-width: 980px; margin: 0 auto; padding: 48px 24px 100px; }
   .admin-tabs { display: flex; gap: 4px; margin-bottom: 32px; flex-wrap: wrap; border-bottom: 1px solid var(--border); padding-bottom: 0; }
@@ -211,15 +211,23 @@
 
     <div class="card" style="padding:24px; max-width:480px; margin-bottom:20px;">
       <h4 style="font-size:15px;">Pricing</h4>
-      <p class="text-muted" style="font-size:13.5px; margin-top:6px;">Updates the price shown on the homepage pricing cards, in Naira. Just the number — no commas or symbol needed.</p>
+      <p class="text-muted" style="font-size:13.5px; margin-top:6px;">Updates the price and the "what's included" list on the homepage pricing cards. One line per item for the list.</p>
       <form id="pricing-form" style="margin-top:18px;">
         <div class="field">
           <label>Academy price (₦)</label>
           <input type="number" id="set-academy-price" placeholder="70000">
         </div>
         <div class="field">
+          <label>Academy — what's included (one per line)</label>
+          <textarea id="set-academy-features" placeholder="Full 4-module curriculum&#10;Live weekly trading sessions&#10;Private mentorship community"></textarea>
+        </div>
+        <div class="field">
           <label>1:1 Mentorship price (₦)</label>
           <input type="number" id="set-mentorship-price" placeholder="100000">
+        </div>
+        <div class="field">
+          <label>1:1 Mentorship — what's included (one per line)</label>
+          <textarea id="set-mentorship-features" placeholder="Direct mentor access&#10;Trade review sessions&#10;Personalized risk plan"></textarea>
         </div>
         <button class="btn btn-primary" type="submit">Save</button>
       </form>
@@ -254,8 +262,8 @@
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/config.js?v=8"></script>
-<script src="js/supabase-client.js?v=8"></script>
-<script src="js/admin.js?v=8"></script>
+<script src="js/config.js?v=9"></script>
+<script src="js/supabase-client.js?v=9"></script>
+<script src="js/admin.js?v=9"></script>
 </body>
 </html>

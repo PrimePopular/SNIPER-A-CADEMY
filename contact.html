@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contact | Sniper Academy</title>
 <meta name="description" content="Get in touch with Sniper Academy — mentorship applications, partnerships, and general questions.">
-<link rel="stylesheet" href="css/style.css?v=8">
+<link rel="stylesheet" href="css/style.css?v=9">
 </head>
 <body>
 
@@ -99,6 +99,13 @@
           <div><div class="title">Community</div><div class="sub">Fastest way to reach us, join via the button below</div></div>
         </div>
         <button class="btn btn-ghost" style="margin-top:24px; width:100%;" id="community-picker-btn">Join Community</button>
+        <form id="community-email-form" style="display:none; margin-top:14px;">
+          <div class="field" style="margin-bottom:12px;">
+            <label for="cm-email">Email</label>
+            <input type="email" id="cm-email" placeholder="you@email.com" required>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;">Continue</button>
+        </form>
         <div id="community-picker-list" style="display:none; margin-top:12px; flex-direction:column; gap:8px;"></div>
       </div>
     </div>
@@ -176,12 +183,12 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/config.js?v=8"></script>
-<script src="js/supabase-client.js?v=8"></script>
-<script src="js/site-media.js?v=8"></script>
-<script src="js/community-signup.js?v=8"></script>
-<script src="js/main.js?v=8"></script>
-<script src="js/payment.js?v=8"></script>
+<script src="js/config.js?v=9"></script>
+<script src="js/supabase-client.js?v=9"></script>
+<script src="js/site-media.js?v=9"></script>
+<script src="js/community-signup.js?v=9"></script>
+<script src="js/main.js?v=9"></script>
+<script src="js/payment.js?v=9"></script>
 <script>
   document.getElementById("contact-form")?.addEventListener("submit", async function (e) {
     e.preventDefault();
@@ -226,10 +233,30 @@
     }
   });
 
-  document.getElementById("community-picker-btn").addEventListener("click", async () => {
+  document.getElementById("community-picker-btn").addEventListener("click", () => {
+    const emailForm = document.getElementById("community-email-form");
     const listEl = document.getElementById("community-picker-list");
     if (listEl.style.display === "flex") { listEl.style.display = "none"; return; }
+    emailForm.style.display = emailForm.style.display === "block" ? "none" : "block";
+  });
 
+  document.getElementById("community-email-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("cm-email").value.trim();
+    const submitBtn = e.target.querySelector("button[type=submit]");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "One moment...";
+
+    try {
+      await sb.from("subscribers").upsert(
+        { email, source: "join_community", verified: true },
+        { onConflict: "email" }
+      );
+    } catch (err) {
+      console.error("[community-email-form]", err);
+    }
+
+    const listEl = document.getElementById("community-picker-list");
     const { data, error } = await sb.from("communities").select("*").order("sort_order", { ascending: true });
     if (error || !data || !data.length) {
       listEl.innerHTML = `<p class="text-muted" style="font-size:13.5px;">No communities added yet.</p>`;
@@ -239,6 +266,9 @@
       ).join("");
     }
     listEl.style.display = "flex";
+    e.target.style.display = "none";
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Continue";
   });
 </script>
 </body>
