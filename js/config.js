@@ -11,4 +11,4 @@ const FALLBACK_COMMUNITY_LINK = "https://chat.whatsapp.com/IEQyQs3J6V49p15DnRZ28
 // no backend needed). Get yours at https://web3forms.com (just enter the
 // email you want messages delivered to, no account needed) and paste the
 // key it gives you here.
-const WEB3FORMS_ACCESS_KEY = "PASTE_YOUR_WEB3FORMS_ACCESS_KEY_HERE";
+const WEB3FORMS_ACCESS_KEY = "9fb5a5b4-d33d-45fe-a992-29da3f909b42";

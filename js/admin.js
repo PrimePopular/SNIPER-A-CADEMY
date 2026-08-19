@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.querySelectorAll("[data-remove-media]").forEach((btn) => {
     btn.addEventListener("click", () => handleSiteMediaRemove(btn));
   });
+  document.getElementById("founder-form").addEventListener("submit", handleSaveFounder);
 });
 
 function showLogin() { loginGate.style.display = "block"; dashboard.style.display = "none"; }
@@ -48,6 +49,7 @@ function showDashboard() {
   loadSubscribers();
   loadCommunities();
   loadSettings();
+  loadFounder();
 }
 
 async function handleLogin(e) {
@@ -397,6 +399,22 @@ async function handleSaveContactEmail(e) {
   toast("Contact email saved");
 }
 
+async function loadFounder() {
+  const { data } = await sb.from("site_settings").select("founder_name, founder_bio").eq("id", 1).single();
+  if (!data) return;
+  document.getElementById("set-founder-name").value = data.founder_name || "";
+  document.getElementById("set-founder-bio").value = data.founder_bio || "";
+}
+
+async function handleSaveFounder(e) {
+  e.preventDefault();
+  const founder_name = document.getElementById("set-founder-name").value.trim();
+  const founder_bio = document.getElementById("set-founder-bio").value.trim();
+  const { error } = await sb.from("site_settings").update({ founder_name, founder_bio }).eq("id", 1);
+  if (error) { toast(`Couldn't save — ${error.message}`); return; }
+  toast("Founder info saved");
+}
+
 // ---- SETTINGS ----
 async function loadSettings() {
   const { data } = await sb.from("site_settings").select("*").eq("id", 1).single();
@@ -406,15 +424,21 @@ async function loadSettings() {
   document.getElementById("set-bootcamp-link").value = data.bootcamp_form_link || "";
   document.getElementById("set-contact-email").value = data.contact_email || "";
   document.getElementById("set-academy-price").value = data.academy_price || "";
+  document.getElementById("set-academy-features").value = data.academy_features || "";
   document.getElementById("set-mentorship-price").value = data.mentorship_price || "";
+  document.getElementById("set-mentorship-features").value = data.mentorship_features || "";
 }
 
 async function handleSavePricing(e) {
   e.preventDefault();
   const academy_price = Number(document.getElementById("set-academy-price").value) || null;
   const mentorship_price = Number(document.getElementById("set-mentorship-price").value) || null;
-  const { error } = await sb.from("site_settings").update({ academy_price, mentorship_price }).eq("id", 1);
-  if (error) { toast("Couldn't save pricing"); return; }
+  const academy_features = document.getElementById("set-academy-features").value.trim();
+  const mentorship_features = document.getElementById("set-mentorship-features").value.trim();
+  const { error } = await sb.from("site_settings")
+    .update({ academy_price, mentorship_price, academy_features, mentorship_features })
+    .eq("id", 1);
+  if (error) { toast(`Couldn't save pricing — ${error.message}`); return; }
   toast("Pricing saved");
 }
 
