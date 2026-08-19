@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confirming — Sniper Academy</title>
+<link rel="stylesheet" href="css/style.css?v=9">
+</head>
+<body>
+
+<div style="min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:24px;">
+  <div class="card glass reveal in" style="max-width:420px; padding:40px 32px;">
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" style="color:var(--accent-bright); margin:0 auto;">
+      <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.4"/>
+      <circle cx="12" cy="12" r="2.4" fill="currentColor"/>
+      <path d="M12 1V5M12 19V23M1 12H5M19 12H23" stroke="currentColor" stroke-width="1.4"/>
+    </svg>
+    <h3 id="confirm-title" style="margin-top:18px;">Confirming your email...</h3>
+    <p id="confirm-message" class="text-muted" style="margin-top:10px;">One second, this won't take long.</p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js?v=9"></script>
+<script src="js/supabase-client.js?v=9"></script>
+<script>
+(async () => {
+  const titleEl = document.getElementById("confirm-title");
+  const msgEl = document.getElementById("confirm-message");
+
+  try {
+    // Supabase puts errors (expired link, unlisted redirect URL, etc.)
+    // straight in the URL hash — surface that instead of a generic message.
+    const hashParams = new URLSearchParams(window.location.hash.replace("#", "?"));
+    const urlError = hashParams.get("error_description") || hashParams.get("error");
+    if (urlError) throw new Error(decodeURIComponent(urlError.replace(/\+/g, " ")));
+
+    const { data: { session } } = await sb.auth.getSession();
+
+    if (!session || !session.user?.email) {
+      titleEl.textContent = "Link expired or invalid";
+      msgEl.textContent = "Head back to the site and try joining again.";
+      return;
+    }
+
+    const email = session.user.email;
+
+    // Mark this subscriber verified.
+    await sb.from("subscribers").update({ verified: true }).eq("email", email);
+
+    // Fetch the community link the admin currently has set.
+    const { data: settings } = await sb
+      .from("site_settings")
+      .select("community_link, community_platform")
+      .eq("id", 1)
+      .single();
+
+    const link = settings?.community_link || FALLBACK_COMMUNITY_LINK;
+    const platform = settings?.community_platform || "the community";
+
+    titleEl.textContent = "You're verified!";
+    msgEl.textContent = `Taking you to ${platform} now...`;
+
+    setTimeout(() => { window.location.href = link; }, 1400);
+  } catch (err) {
+    console.error("[confirm]", err);
+    titleEl.textContent = "Couldn't confirm that";
+    msgEl.textContent = err.message || "Please head back to the site and try again.";
+  }
+})();
+</script>
+</body>
+</html>
