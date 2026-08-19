@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin — Sniper Academy</title>
 <meta name="robots" content="noindex, nofollow">
-<link rel="stylesheet" href="css/style.css?v=9">
+<link rel="stylesheet" href="css/style.css?v=10">
 <style>
   .admin-shell { max-width: 980px; margin: 0 auto; padding: 48px 24px 100px; }
   .admin-tabs { display: flex; gap: 4px; margin-bottom: 32px; flex-wrap: wrap; border-bottom: 1px solid var(--border); padding-bottom: 0; }
@@ -185,9 +185,17 @@
 
     <div class="card" style="padding:22px; max-width:560px;">
       <span class="eyebrow">5 · Appears on: About page (founder story)</span>
-      <h4 style="font-size:16px; margin-top:8px;">Founder photo</h4>
-      <div style="margin-top:14px;"><input type="file" id="media-founder" accept="image/*"></div>
+      <h4 style="font-size:16px; margin-top:8px;">Founder</h4>
+      <p class="text-muted" style="font-size:13px; margin-top:4px;">Photo, name, and story — same as Team members, no code editing needed for any of it.</p>
+
+      <div style="margin-top:16px;"><input type="file" id="media-founder" accept="image/*"></div>
       <div style="display:flex; gap:10px; margin-top:12px;"><button class="btn btn-ghost" data-upload-media="founder_photo_url" data-input="media-founder" style="padding:8px 16px; font-size:13px;">Upload photo</button><button class="btn btn-ghost" data-remove-media="founder_photo_url" style="padding:8px 16px; font-size:13px; color:var(--text-faint);">Remove (use default)</button></div>
+
+      <form id="founder-form" style="margin-top:18px; padding-top:18px; border-top:1px solid var(--border);">
+        <div class="field"><label>Name</label><input type="text" id="set-founder-name" placeholder="Founder name"></div>
+        <div class="field"><label>Story / bio</label><textarea id="set-founder-bio" placeholder="How this trading approach was developed, what shaped the risk-management module, why the academy is built around discipline..."></textarea></div>
+        <button class="btn btn-primary" type="submit">Save</button>
+      </form>
     </div>
   </div>
 
@@ -262,8 +270,8 @@
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/config.js?v=9"></script>
-<script src="js/supabase-client.js?v=9"></script>
-<script src="js/admin.js?v=9"></script>
+<script src="js/config.js?v=10"></script>
+<script src="js/supabase-client.js?v=10"></script>
+<script src="js/admin.js?v=10"></script>
 </body>
 </html>
