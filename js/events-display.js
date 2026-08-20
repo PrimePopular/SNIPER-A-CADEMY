@@ -57,9 +57,13 @@ function renderCountdownCards(events, container, { limit } = {}) {
         </div>`;
 
     return ev.link_url
-      ? `<a class="event-card card" href="${ev.link_url}" target="_blank" rel="noopener" style="display:flex; flex-direction:column; cursor:pointer;">${inner}</a>`
+      ? `<div class="event-card card" data-event-link="${ev.link_url}" style="display:flex; flex-direction:column; cursor:pointer;">${inner}</div>`
       : `<div class="event-card card">${inner}</div>`;
   }).join("");
+
+  container.querySelectorAll("[data-event-link]").forEach((card) => {
+    card.addEventListener("click", () => openEventLinkEmailGate(card.dataset.eventLink));
+  });
 
   tickCountdowns(container);
   if (!container.dataset.ticking) {
@@ -128,4 +132,53 @@ function escapeHtmlEv(str) {
   const div = document.createElement("div");
   div.textContent = str ?? "";
   return div.innerHTML;
+}
+
+function openEventLinkEmailGate(link) {
+  let overlay = document.getElementById("event-link-modal");
+  if (overlay) overlay.remove();
+
+  overlay = document.createElement("div");
+  overlay.id = "event-link-modal";
+  overlay.className = "modal-overlay open";
+  overlay.innerHTML = `
+    <div class="modal">
+      <button class="modal-close" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6L18 18M6 18L18 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+      <svg class="reticle-mini" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="2.4" fill="currentColor"/><path d="M12 1V5M12 19V23M1 12H5M19 12H23" stroke="currentColor" stroke-width="1.4"/></svg>
+      <h3>Continue to event</h3>
+      <p>Enter your email and you'll be taken straight there.</p>
+      <form id="event-link-form" style="margin-top:18px;">
+        <div class="field" style="margin-bottom:14px;">
+          <label for="ev-link-email">Email</label>
+          <input type="email" id="ev-link-email" placeholder="you@email.com" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;">Continue</button>
+      </form>
+    </div>`;
+  document.body.appendChild(overlay);
+  document.body.style.overflow = "hidden";
+
+  const close = () => { overlay.remove(); document.body.style.overflow = ""; };
+  overlay.querySelector(".modal-close").addEventListener("click", close);
+  overlay.addEventListener("click", (e) => { if (e.target === overlay) close(); });
+
+  overlay.querySelector("#event-link-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = overlay.querySelector("#ev-link-email").value.trim();
+    const submitBtn = e.target.querySelector("button[type=submit]");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "One moment...";
+    try {
+      await sb.from("subscribers").upsert(
+        { email, source: "event_link", verified: true },
+        { onConflict: "email" }
+      );
+    } catch (err) {
+      console.error("[event-link-form]", err);
+    }
+    window.open(link, "_blank", "noopener");
+    close();
+  });
 }

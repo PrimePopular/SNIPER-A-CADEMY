@@ -97,9 +97,13 @@ async function handleAddEvent(e) {
   e.preventDefault();
   const title = document.getElementById("ev-title").value.trim();
   const description = document.getElementById("ev-desc").value.trim();
-  const starts_at = document.getElementById("ev-date").value;
+  // datetime-local gives a plain string with no timezone — treat it as the
+  // browser's local time and convert properly, otherwise Postgres stores it
+  // as UTC and every event ends up shown an hour (or more) off.
+  const startsRaw = document.getElementById("ev-date").value;
+  const starts_at = startsRaw ? new Date(startsRaw).toISOString() : null;
   const endsRaw = document.getElementById("ev-end").value;
-  const ends_at = endsRaw ? endsRaw : null;
+  const ends_at = endsRaw ? new Date(endsRaw).toISOString() : null;
   const link_url = document.getElementById("ev-link").value.trim() || null;
   const mediaFile = document.getElementById("ev-media").files[0];
   const submitBtn = e.target.querySelector("button[type=submit]");
