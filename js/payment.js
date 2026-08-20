@@ -8,6 +8,10 @@
 
 const PAYSTACK_PUBLIC_KEY = "pk_test_c8751d628263ad70d931606cbd34184980d51ca7";
 
+// Set after deploying the verify-payment edge function — see EDGE_FUNCTION_SETUP.md.
+// Looks like: https://vhyoqhzptjplccsjhoic.supabase.co/functions/v1/verify-payment
+const VERIFY_PAYMENT_URL = "https://vhyoqhzptjplccsjhoic.supabase.co/functions/v1/verify-payment";
+
 const PAYMENT_CONFIG = {
   bootcamp: {
     label: "3-Day Bootcamp",
@@ -88,15 +92,35 @@ function openPaymentEmailModal(tier, config) {
     const statusEl = overlay.querySelector("#payment-status");
 
     submitBtn.disabled = true;
-    submitBtn.textContent = "Loading checkout...";
+    submitBtn.textContent = "Checking...";
 
     try {
+      // Stop an accidental double-payment: if this email already has a
+      // verified payment for this tier, don't charge them again.
+      const { data: existing } = await sb
+        .from("payments")
+        .select("id")
+        .eq("email", email)
+        .eq("tier", tier)
+        .eq("status", "success")
+        .maybeSingle();
+
+      if (existing) {
+        statusEl.textContent = `Looks like ${email} has already paid for ${config.label}. If this is a mistake, reach out via Contact.`;
+        statusEl.style.color = "var(--accent-bright)";
+        statusEl.style.display = "block";
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Continue to payment";
+        return;
+      }
+
       // Save as a lead regardless of whether checkout completes.
       await sb.from("subscribers").upsert(
         { email, source: `payment_${tier}`, verified: true },
         { onConflict: "email" }
       );
 
+      submitBtn.textContent = "Loading checkout...";
       await loadPaystackScript();
 
       const handler = window.PaystackPop.setup({
@@ -105,9 +129,31 @@ function openPaymentEmailModal(tier, config) {
         amount: config.amount * 100, // Paystack expects kobo
         currency: config.currency,
         ref: `sniper-${tier}-${Date.now()}`,
-        callback: function (response) {
-          close();
-          alert(`Payment successful. Reference: ${response.reference}\n\nWe'll follow up at ${email} shortly.`);
+        callback: async function (response) {
+          statusEl.textContent = "Confirming payment...";
+          statusEl.style.color = "var(--accent-bright)";
+          statusEl.style.display = "block";
+
+          try {
+            const verifyRes = await fetch(VERIFY_PAYMENT_URL, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ reference: response.reference, email, tier }),
+            });
+            const result = await verifyRes.json();
+
+            if (result.verified) {
+              close();
+              alert(`Payment confirmed. Reference: ${response.reference}\n\nWe'll follow up at ${email} shortly.`);
+            } else {
+              statusEl.textContent = "We couldn't confirm that payment went through — if you were charged, contact us with this reference: " + response.reference;
+              statusEl.style.color = "#ff6b6b";
+            }
+          } catch (err) {
+            console.error("[payment verify]", err);
+            statusEl.textContent = "Payment may have gone through, but we couldn't confirm it automatically. Contact us with this reference: " + response.reference;
+            statusEl.style.color = "#ff6b6b";
+          }
         },
         onClose: function () {
           submitBtn.disabled = false;
