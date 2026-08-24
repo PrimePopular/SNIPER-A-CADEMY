@@ -171,9 +171,8 @@ function openEventLinkEmailGate(link) {
     submitBtn.disabled = true;
     submitBtn.textContent = "One moment...";
     try {
-      await sb.from("subscribers").upsert(
-        { email, source: "event_link", verified: true },
-        { onConflict: "email" }
+      await sb.from("subscribers").insert(
+        { email, source: "event_link", verified: true }
       );
     } catch (err) {
       console.error("[event-link-form]", err);

@@ -115,9 +115,8 @@ function openPaymentEmailModal(tier, config) {
       }
 
       // Save as a lead regardless of whether checkout completes.
-      await sb.from("subscribers").upsert(
-        { email, source: `payment_${tier}`, verified: true },
-        { onConflict: "email" }
+      await sb.from("subscribers").insert(
+        { email, source: `payment_${tier}`, verified: true }
       );
 
       submitBtn.textContent = "Loading checkout...";

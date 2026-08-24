@@ -22,11 +22,15 @@ document.addEventListener("DOMContentLoaded", () => {
     showStatus("");
 
     try {
-      const { error: subError } = await sb.from("subscribers").upsert(
-        { email, source: "join_modal", verified: true },
-        { onConflict: "email" }
+      // Plain insert, not upsert — upsert needs to "check first" whether the
+      // email already exists, which requires read access we deliberately
+      // don't grant publicly. A plain insert doesn't need that check; if the
+      // email's already there, Postgres just tells us (code 23505) and we
+      // treat that as success rather than an error.
+      const { error: subError } = await sb.from("subscribers").insert(
+        { email, source: "join_modal", verified: true }
       );
-      if (subError) throw subError;
+      if (subError && subError.code !== "23505") throw subError;
 
       const { data: settings } = await sb
         .from("site_settings")
