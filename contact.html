@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contact | Sniper Academy</title>
 <meta name="description" content="Get in touch with Sniper Academy — mentorship applications, partnerships, and general questions.">
-<link rel="stylesheet" href="css/style.css?v=14">
+<link rel="stylesheet" href="css/style.css?v=15">
 </head>
 <body>
 
@@ -186,12 +186,12 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/config.js?v=14"></script>
-<script src="js/supabase-client.js?v=14"></script>
-<script src="js/site-media.js?v=14"></script>
-<script src="js/community-signup.js?v=14"></script>
-<script src="js/main.js?v=14"></script>
-<script src="js/payment.js?v=14"></script>
+<script src="js/config.js?v=15"></script>
+<script src="js/supabase-client.js?v=15"></script>
+<script src="js/site-media.js?v=15"></script>
+<script src="js/community-signup.js?v=15"></script>
+<script src="js/main.js?v=15"></script>
+<script src="js/payment.js?v=15"></script>
 <script>
   document.getElementById("contact-form")?.addEventListener("submit", async function (e) {
     e.preventDefault();
@@ -251,9 +251,8 @@
     submitBtn.textContent = "One moment...";
 
     try {
-      await sb.from("subscribers").upsert(
-        { email, source: "join_community", verified: true },
-        { onConflict: "email" }
+      await sb.from("subscribers").insert(
+        { email, source: "join_community", verified: true }
       );
     } catch (err) {
       console.error("[community-email-form]", err);

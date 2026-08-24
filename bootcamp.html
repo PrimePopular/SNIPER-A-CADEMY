@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>3-Day Bootcamp | Sniper Academy</title>
 <meta name="description" content="A free 3-day bootcamp: a short, structured intro to the Sniper Academy framework before you decide to go deeper.">
-<link rel="stylesheet" href="css/style.css?v=14">
+<link rel="stylesheet" href="css/style.css?v=15">
 </head>
 <body>
 
@@ -197,12 +197,12 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/config.js?v=14"></script>
-<script src="js/supabase-client.js?v=14"></script>
-<script src="js/site-media.js?v=14"></script>
-<script src="js/community-signup.js?v=14"></script>
-<script src="js/main.js?v=14"></script>
-<script src="js/payment.js?v=14"></script>
+<script src="js/config.js?v=15"></script>
+<script src="js/supabase-client.js?v=15"></script>
+<script src="js/site-media.js?v=15"></script>
+<script src="js/community-signup.js?v=15"></script>
+<script src="js/main.js?v=15"></script>
+<script src="js/payment.js?v=15"></script>
 <script>
   document.getElementById("bootcamp-email-form").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -215,11 +215,10 @@
     statusEl.style.display = "none";
 
     try {
-      const { error: subError } = await sb.from("subscribers").upsert(
-        { email, source: "bootcamp", verified: true },
-        { onConflict: "email" }
+      const { error: subError } = await sb.from("subscribers").insert(
+        { email, source: "bootcamp", verified: true }
       );
-      if (subError) throw subError;
+      if (subError && subError.code !== "23505") throw subError;
 
       const { data } = await sb.from("site_settings").select("bootcamp_form_link").eq("id", 1).single();
       const link = data?.bootcamp_form_link;
