@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("testimonial-form").addEventListener("submit", handleAddTestimonial);
   document.getElementById("settings-form").addEventListener("submit", handleSaveSettings);
   document.getElementById("bootcamp-link-form").addEventListener("submit", handleSaveBootcampLink);
+  document.getElementById("payments-switch-form").addEventListener("submit", handleSavePaymentsSwitch);
   document.getElementById("community-form").addEventListener("submit", handleAddCommunity);
   document.getElementById("contact-email-form").addEventListener("submit", handleSaveContactEmail);
   document.getElementById("pricing-form").addEventListener("submit", handleSavePricing);
@@ -36,6 +37,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     btn.addEventListener("click", () => handleSiteMediaRemove(btn));
   });
   document.getElementById("founder-form").addEventListener("submit", handleSaveFounder);
+  document.getElementById("ebook-form").addEventListener("submit", handleSaveEbook);
 });
 
 function showLogin() { loginGate.style.display = "block"; dashboard.style.display = "none"; }
@@ -50,6 +52,7 @@ function showDashboard() {
   loadCommunities();
   loadSettings();
   loadFounder();
+  loadEbook();
 }
 
 async function handleLogin(e) {
@@ -419,6 +422,20 @@ async function handleSaveFounder(e) {
   toast("Founder info saved");
 }
 
+async function loadEbook() {
+  const { data } = await sb.from("site_settings").select("ebook_title").eq("id", 1).single();
+  if (!data) return;
+  document.getElementById("set-ebook-title").value = data.ebook_title || "";
+}
+
+async function handleSaveEbook(e) {
+  e.preventDefault();
+  const ebook_title = document.getElementById("set-ebook-title").value.trim();
+  const { error } = await sb.from("site_settings").update({ ebook_title }).eq("id", 1);
+  if (error) { toast(`Couldn't save — ${error.message}`); return; }
+  toast("Ebook title saved");
+}
+
 // ---- SETTINGS ----
 async function loadSettings() {
   const { data } = await sb.from("site_settings").select("*").eq("id", 1).single();
@@ -431,6 +448,8 @@ async function loadSettings() {
   document.getElementById("set-academy-features").value = data.academy_features || "";
   document.getElementById("set-mentorship-price").value = data.mentorship_price || "";
   document.getElementById("set-mentorship-features").value = data.mentorship_features || "";
+  document.getElementById("set-payments-enabled").checked = data.payments_enabled !== false;
+  document.getElementById("set-payments-off-link").value = data.payments_off_link || "";
 }
 
 async function handleSavePricing(e) {
@@ -461,6 +480,17 @@ async function handleSaveBootcampLink(e) {
   const { error } = await sb.from("site_settings").update({ bootcamp_form_link }).eq("id", 1);
   if (error) { toast("Couldn't save link"); return; }
   toast("Bootcamp form link saved");
+}
+
+async function handleSavePaymentsSwitch(e) {
+  e.preventDefault();
+  const payments_enabled = document.getElementById("set-payments-enabled").checked;
+  const payments_off_link = document.getElementById("set-payments-off-link").value.trim();
+  const { error } = await sb.from("site_settings")
+    .update({ payments_enabled, payments_off_link })
+    .eq("id", 1);
+  if (error) { toast(`Couldn't save — ${error.message}`); return; }
+  toast(payments_enabled ? "Payments are ON" : "Payments are OFF — redirecting to your link instead");
 }
 
 function escapeHtml(str) {

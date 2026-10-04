@@ -12,21 +12,26 @@ const PAYSTACK_PUBLIC_KEY = "pk_test_c8751d628263ad70d931606cbd34184980d51ca7";
 // Looks like: https://vhyoqhzptjplccsjhoic.supabase.co/functions/v1/verify-payment
 const VERIFY_PAYMENT_URL = "https://vhyoqhzptjplccsjhoic.supabase.co/functions/v1/verify-payment";
 
+// NOTE: amounts below are now in USD. Charging in USD via Paystack
+// generally requires the Paystack account itself to have multi-currency
+// (USD) settlement enabled — an account-level setting on Paystack's side,
+// not something this code controls. If checkout errors out once payments
+// are turned back on, that's the first thing to check with Paystack.
 const PAYMENT_CONFIG = {
   bootcamp: {
     label: "3-Day Bootcamp",
     amount: null,      // free — this tier has no paid checkout
-    currency: "NGN",
+    currency: "USD",
   },
   academy: {
     label: "Main Academy",
-    amount: 70000,
-    currency: "NGN",
+    amount: 45,
+    currency: "USD",
   },
   mentorship: {
     label: "1:1 Mentorship",
-    amount: 100000,
-    currency: "NGN",
+    amount: 65,
+    currency: "USD",
   },
 };
 
@@ -41,7 +46,7 @@ function loadPaystackScript() {
   });
 }
 
-function initiatePayment(tier) {
+async function initiatePayment(tier) {
   const config = PAYMENT_CONFIG[tier];
   if (!config) {
     console.warn(`[payment] Unknown tier: ${tier}`);
@@ -51,6 +56,19 @@ function initiatePayment(tier) {
     console.warn(`[payment] ${tier} has no price set — skipping checkout.`);
     return;
   }
+
+  const { data: settings } = await sb
+    .from("site_settings")
+    .select("payments_enabled, payments_off_link")
+    .eq("id", 1)
+    .single();
+
+  if (settings && settings.payments_enabled === false) {
+    const link = settings.payments_off_link || FALLBACK_COMMUNITY_LINK;
+    window.location.href = link;
+    return;
+  }
+
   openPaymentEmailModal(tier, config);
 }
 
@@ -68,7 +86,7 @@ function openPaymentEmailModal(tier, config) {
       </button>
       <svg class="reticle-mini" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="2.4" fill="currentColor"/><path d="M12 1V5M12 19V23M1 12H5M19 12H23" stroke="currentColor" stroke-width="1.4"/></svg>
       <h3>${config.label}</h3>
-      <p>₦${config.amount.toLocaleString()} — enter your email to continue to checkout.</p>
+      <p>$${config.amount.toLocaleString()} — enter your email to continue to checkout.</p>
       <form id="payment-email-form" style="margin-top:18px;">
         <div class="field" style="margin-bottom:14px;">
           <label for="pay-email">Email</label>
