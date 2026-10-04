@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin — Sniper Academy</title>
 <meta name="robots" content="noindex, nofollow">
-<link rel="stylesheet" href="css/style.css?v=15">
+<link rel="stylesheet" href="css/style.css?v=17">
 <style>
   .admin-shell { max-width: 980px; margin: 0 auto; padding: 48px 24px 100px; }
   .admin-tabs { display: flex; gap: 4px; margin-bottom: 32px; flex-wrap: wrap; border-bottom: 1px solid var(--border); padding-bottom: 0; }
@@ -200,6 +200,29 @@
         <button class="btn btn-primary" type="submit">Save</button>
       </form>
     </div>
+
+    <div class="card" style="padding:22px; max-width:560px; margin-top:16px;">
+      <span class="eyebrow">6 · Appears on: Bootcamp page, Home page, and the Join Academy popup</span>
+      <h4 style="font-size:16px; margin-top:8px;">Free ebook lead magnet</h4>
+      <p class="text-muted" style="font-size:13px; margin-top:4px;">Upload the cover image and the actual PDF — the download button on the site serves this exact file.</p>
+
+      <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border);">
+        <label style="font-family:var(--font-mono); font-size:13px; color:var(--text-muted);">Cover image</label>
+        <div style="margin-top:10px;"><input type="file" id="media-ebook-cover" accept="image/*"></div>
+        <div style="display:flex; gap:10px; margin-top:12px;"><button class="btn btn-ghost" data-upload-media="ebook_cover_url" data-input="media-ebook-cover" style="padding:8px 16px; font-size:13px;">Upload cover</button><button class="btn btn-ghost" data-remove-media="ebook_cover_url" style="padding:8px 16px; font-size:13px; color:var(--text-faint);">Remove</button></div>
+      </div>
+
+      <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border);">
+        <label style="font-family:var(--font-mono); font-size:13px; color:var(--text-muted);">PDF file</label>
+        <div style="margin-top:10px;"><input type="file" id="media-ebook-pdf" accept="application/pdf"></div>
+        <div style="display:flex; gap:10px; margin-top:12px;"><button class="btn btn-ghost" data-upload-media="ebook_pdf_url" data-input="media-ebook-pdf" style="padding:8px 16px; font-size:13px;">Upload PDF</button><button class="btn btn-ghost" data-remove-media="ebook_pdf_url" style="padding:8px 16px; font-size:13px; color:var(--text-faint);">Remove</button></div>
+      </div>
+
+      <form id="ebook-form" style="margin-top:18px; padding-top:18px; border-top:1px solid var(--border);">
+        <div class="field"><label>Book title</label><input type="text" id="set-ebook-title" placeholder="Money Grows on Trees"></div>
+        <button class="btn btn-primary" type="submit">Save</button>
+      </form>
+    </div>
   </div>
 
   <!-- SETTINGS -->
@@ -225,16 +248,16 @@
       <p class="text-muted" style="font-size:13.5px; margin-top:6px;">Updates the price and the "what's included" list on the homepage pricing cards. One line per item for the list.</p>
       <form id="pricing-form" style="margin-top:18px;">
         <div class="field">
-          <label>Academy price (₦)</label>
-          <input type="number" id="set-academy-price" placeholder="70000">
+          <label>Academy price ($)</label>
+          <input type="number" id="set-academy-price" placeholder="45">
         </div>
         <div class="field">
           <label>Academy — what's included (one per line)</label>
           <textarea id="set-academy-features" placeholder="Full 4-module curriculum&#10;Live weekly trading sessions&#10;Private mentorship community"></textarea>
         </div>
         <div class="field">
-          <label>1:1 Mentorship price (₦)</label>
-          <input type="number" id="set-mentorship-price" placeholder="100000">
+          <label>1:1 Mentorship price ($)</label>
+          <input type="number" id="set-mentorship-price" placeholder="65">
         </div>
         <div class="field">
           <label>1:1 Mentorship — what's included (one per line)</label>
@@ -267,14 +290,30 @@
         <button class="btn btn-primary" type="submit">Save</button>
       </form>
     </div>
+
+    <div class="card" style="padding:24px; max-width:480px;">
+      <h4 style="font-size:15px;">Payments switch</h4>
+      <p class="text-muted" style="font-size:13.5px; margin-top:6px;">Turn this off if Paystack has an outage or error. While off, Enroll and Mentorship buttons skip payment entirely and go straight to the link below instead — WhatsApp, a personal contact page, whatever you choose.</p>
+      <form id="payments-switch-form" style="margin-top:18px;">
+        <div class="field" style="flex-direction:row; align-items:center; gap:10px;">
+          <input type="checkbox" id="set-payments-enabled" style="width:18px; height:18px;">
+          <label style="margin:0;" for="set-payments-enabled">Payments enabled (checked = Paystack checkout is live)</label>
+        </div>
+        <div class="field" style="margin-top:14px;">
+          <label>Redirect link (used only while payments are off)</label>
+          <input type="url" id="set-payments-off-link" placeholder="https://wa.me/... or any link">
+        </div>
+        <button class="btn btn-primary" type="submit">Save</button>
+      </form>
+    </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/config.js?v=15"></script>
-<script src="js/supabase-client.js?v=15"></script>
-<script src="js/admin.js?v=15"></script>
+<script src="js/config.js?v=17"></script>
+<script src="js/supabase-client.js?v=17"></script>
+<script src="js/admin.js?v=17"></script>
 </body>
 </html>
