@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sniper Academy: Trade With Precision</title>
 <meta name="description" content="Sniper Academy teaches a systematic approach to trading: institutional frameworks, execution discipline, and risk management — no guesswork.">
-<link rel="stylesheet" href="css/style.css?v=15">
+<link rel="stylesheet" href="css/style.css?v=17">
 </head>
 <body>
 
@@ -95,6 +95,10 @@
         <p>From foundational market mechanics to live tape execution: one curriculum, built in sequence, nothing skipped.</p>
       </div>
     </div>
+  </div>
+
+  <div class="container" style="margin-top:32px;">
+    <div id="ebook-teaser" class="reveal"></div>
   </div>
 
   <!-- COMING SOON / EVENTS -->
@@ -216,7 +220,7 @@
         <div class="price-card card featured">
           <span class="price-badge">Most popular</span>
           <span class="tier">Academy</span>
-          <div class="amount" id="academy-price-display">₦70,000</div>
+          <div class="amount" id="academy-price-display">$45</div>
           <ul id="academy-features-list">
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12L10 17L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Full 4-module curriculum</li>
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12L10 17L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Live weekly trading sessions</li>
@@ -226,7 +230,7 @@
         </div>
         <div class="price-card card">
           <span class="tier">1:1 Mentorship</span>
-          <div class="amount" id="mentorship-price-display">₦100,000</div>
+          <div class="amount" id="mentorship-price-display">$65</div>
           <ul id="mentorship-features-list">
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12L10 17L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Direct mentor access</li>
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12L10 17L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Trade review sessions</li>
@@ -324,14 +328,17 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/config.js?v=15"></script>
-<script src="js/supabase-client.js?v=15"></script>
-<script src="js/site-media.js?v=15"></script>
-<script src="js/community-signup.js?v=15"></script>
-<script src="js/main.js?v=15"></script>
-<script src="js/payment.js?v=15"></script>
-<script src="js/events-display.js?v=15"></script>
+<script src="js/config.js?v=17"></script>
+<script src="js/supabase-client.js?v=17"></script>
+<script src="js/site-media.js?v=17"></script>
+<script src="js/community-signup.js?v=17"></script>
+<script src="js/main.js?v=17"></script>
+<script src="js/payment.js?v=17"></script>
+<script src="js/events-display.js?v=17"></script>
+<script src="js/ebook.js?v=17"></script>
 <script>
+  renderEbookTeaser(document.getElementById("ebook-teaser"));
+
   fetchEvents().then((events) => {
     renderCountdownCards(events, document.getElementById("home-events-list"), { limit: 3 });
   });
@@ -341,7 +348,7 @@
     const checkIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12L10 17L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
     if (data.academy_price) {
-      document.getElementById("academy-price-display").textContent = `₦${Number(data.academy_price).toLocaleString()}`;
+      document.getElementById("academy-price-display").textContent = `$${Number(data.academy_price).toLocaleString()}`;
       PAYMENT_CONFIG.academy.amount = data.academy_price;
     }
     if (data.academy_features) {
@@ -350,7 +357,7 @@
     }
 
     if (data.mentorship_price) {
-      document.getElementById("mentorship-price-display").textContent = `₦${Number(data.mentorship_price).toLocaleString()}`;
+      document.getElementById("mentorship-price-display").textContent = `$${Number(data.mentorship_price).toLocaleString()}`;
       PAYMENT_CONFIG.mentorship.amount = data.mentorship_price;
     }
     if (data.mentorship_features) {
