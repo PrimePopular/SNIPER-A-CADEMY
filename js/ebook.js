@@ -50,10 +50,12 @@ async function renderEbookTeaser(container) {
       ${cover}
       <div style="flex:1;">
         <div style="font-size:14.5px; font-weight:600;">Free ebook: ${title}</div>
-        <div class="text-muted" style="font-size:13px; margin-top:2px;">Usually $30 — free with the 3-day bootcamp</div>
+        <div class="text-muted" style="font-size:13px; margin-top:2px;">Usually $30 — free today</div>
       </div>
-      <a href="bootcamp.html" class="btn-link">Get it <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <button type="button" class="btn-link" data-ebook-download style="background:none; border:none; cursor:pointer; padding:0;">Get it <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </div>`;
+
+  container.querySelector("[data-ebook-download]").addEventListener("click", () => openEbookDownloadGate(ebook));
 }
 
 // ---- Placement 3: "Join Academy" popup (Bootcamp page, on load) ----
